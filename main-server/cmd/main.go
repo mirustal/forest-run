@@ -9,19 +9,27 @@ import (
 )
 
 func main() {
-	env := boot.NewEnv()
+	env, err := boot.NewEnv()
+	if err != nil {
+		panic(err)
+	}
+
 	logger := boot.NewLogger(env)
 	defer logger.Sync()
 
 	app := fiber.New()
-	// db := boot.NewDb()
+	db, err := boot.NewDB(env, logger)
+	if err != nil {
+		logger.Fatal("Error on initializing DB: ", zap.Error(err))
+		panic(err)
+	}
 
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 	}))
 
-	route.Setup(app, env, logger /*, db*/)
+	route.Setup(app, env, logger, db)
 
 	if err := app.Listen(env.ServerAddress); err != nil {
 		logger.Fatal("Oops... Server is not running! Reason: ", zap.Error(err))

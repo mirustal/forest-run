@@ -7,7 +7,7 @@ import (
 )
 
 func NewLogger(env *Env) *zap.Logger {
-	if env.AppEnv == "prod" {
+	if env.AppEnv == ProdEnv {
 
 		w := zapcore.AddSync(&lumberjack.Logger{
 			Filename:   env.LogSaveFile,
