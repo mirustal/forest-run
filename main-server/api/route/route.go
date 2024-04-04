@@ -7,5 +7,6 @@ import (
 )
 
 func Setup(app *fiber.App, env *boot.Env, logger *zap.Logger) {
+	defer logger.Sync()
 	InitHelloWorldRouter(app, env)
 }

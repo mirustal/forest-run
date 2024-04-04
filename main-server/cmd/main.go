@@ -11,6 +11,8 @@ import (
 func main() {
 	env := boot.NewEnv()
 	logger := boot.NewLogger(env)
+	defer logger.Sync()
+
 	app := fiber.New()
 	// db := boot.NewDb()
 
@@ -20,10 +22,8 @@ func main() {
 	}))
 
 	route.Setup(app, env, logger /*, db*/)
-	logger.Info("i work beatch")
-	_ = logger.Sync()
+
 	if err := app.Listen(env.ServerAddress); err != nil {
 		logger.Fatal("Oops... Server is not running! Reason: ", zap.Error(err))
-		_ = logger.Sync()
 	}
 }
