@@ -2,7 +2,7 @@
 -- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS subscriptions
 (
-    follower_id bigint NOT NULL REFERENCES users(id),
+    follower_id BIGINT NOT NULL REFERENCES users(id),
     followed_id bigint NOT NULL REFERENCES users(id)
 );
 -- +goose StatementEnd

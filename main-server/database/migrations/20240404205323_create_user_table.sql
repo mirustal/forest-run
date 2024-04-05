@@ -5,10 +5,10 @@ CREATE TABLE IF NOT EXISTS users
     id SERIAL PRIMARY KEY ,
     login VARCHAR(64) NOT NULL UNIQUE,
     password CHAR(256) NOT NULL,
-    name varchar(64),
-    avatar_url text,
-    created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
-    updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp
+    name VARCHAR(64),
+    avatar_url TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 -- +goose StatementEnd
 
