@@ -15,5 +15,5 @@ CREATE TABLE IF NOT EXISTS run_posts
 
 -- +goose Down
 -- +goose StatementBegin
-drop table if EXISTS run_posts;
+DROP TABLE IF EXISTS run_posts;
 -- +goose StatementEnd
