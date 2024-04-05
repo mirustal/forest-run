@@ -2,13 +2,13 @@
 -- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS users
 (
-    id SERIAL PRIMARY KEY ,
-    login VARCHAR(64) NOT NULL UNIQUE,
-    password CHAR(256) NOT NULL,
-    name VARCHAR(64),
+    id         SERIAL PRIMARY KEY,
+    login      VARCHAR(64) NOT NULL UNIQUE,
+    password   CHAR(256)   NOT NULL,
+    name       VARCHAR(64),
     avatar_url TEXT,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 -- +goose StatementEnd
 
