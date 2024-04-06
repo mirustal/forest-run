@@ -6,6 +6,5 @@ type (
 		Password Password `json:"password,omitempty"`
 	}
 	SignUpResponse struct {
-		AuthToken AuthToken `json:"success,omitempty"`
 	}
 )
