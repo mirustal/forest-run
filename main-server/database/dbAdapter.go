@@ -1,15 +1,27 @@
 package database
 
-import "github.com/jackc/pgx/v5"
+import (
+	"context"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"go.uber.org/zap"
+	"main/boot"
+)
 
 type DbAdapter interface {
 }
 
 type PgDbAdapter struct {
-	conn *pgx.Conn
+	dbPool *pgxpool.Pool
 }
 
-func NewAdapter(conn *pgx.Conn) (DbAdapter, error) {
-	dbAdapter := &PgDbAdapter{conn: conn}
-	return dbAdapter, nil
+func NewAdapter(env *boot.Env, logger *zap.Logger) (DbAdapter, error) {
+	dbPool, err := pgxpool.New(context.Background(), env.DBUrl)
+	if err != nil {
+		logger.Fatal("Unable to create connection pool: ", zap.Error(err))
+		return nil, err
+	}
+
+	return PgDbAdapter{
+		dbPool: dbPool,
+	}, nil
 }
