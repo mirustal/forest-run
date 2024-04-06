@@ -9,5 +9,5 @@ import (
 
 func Setup(app *fiber.App, env *boot.Env, logger *zap.Logger, db database.DbAdapter) {
 	defer logger.Sync()
-	InitHelloWorldRouter(app, env)
+	initSignUp(app, db, logger)
 }
