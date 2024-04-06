@@ -14,7 +14,7 @@ import (
 //	@Tags			auth
 //	@Accepts		json
 //	@Produce		json
-//	@Params			input body domain.SignUpRequest true "SignUp data"
+//	@Param			input	body		domain.SignUpRequest	true	"SignUp data"
 //	@Success		200		{object}	domain.SignUpResponse
 //	@Failure		400,409	{object}	domain.ErrorResponse
 //	@Failure		500		{object}	domain.ErrorResponse

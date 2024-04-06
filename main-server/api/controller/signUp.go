@@ -56,5 +56,4 @@ func (c *SignUp) Handle(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(http.StatusOK).JSON(domain.SignUpResponse{})
-
 }

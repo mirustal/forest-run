@@ -7,6 +7,13 @@ definitions:
       message:
         type: string
     type: object
+  domain.SignUpRequest:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    type: object
   domain.SignUpResponse:
     type: object
 host: localhost:8080
@@ -18,6 +25,13 @@ paths:
   /auth/sign-up:
     post:
       description: Register in app and get access token
+      parameters:
+      - description: SignUp data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.SignUpRequest'
       produces:
       - application/json
       responses:

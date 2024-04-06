@@ -9,6 +9,8 @@ import (
 	"main-server/boot"
 	"main-server/database"
 	_ "main-server/docs"
+
+	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
 //	@title		Forest Run API
@@ -31,6 +33,8 @@ func main() {
 	defer logger.Sync()
 
 	app := fiber.New()
+	app.Use(recover.New())
+
 	db, err := database.NewAdapter(env, logger)
 	if err != nil {
 		logger.Fatal("Error on initializing DB: ", zap.Error(err))

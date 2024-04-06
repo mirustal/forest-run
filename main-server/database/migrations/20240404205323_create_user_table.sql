@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS users
     password                 CHAR(64)    NOT NULL,
     name                     VARCHAR(64),
     avatar_url               TEXT,
-    refresh_token            CHAR(64)    NOT NULL,
-    refresh_token_expires_at TIMESTAMP   NOT NULL,
+    refresh_token            CHAR(64),
+    refresh_token_expires_at TIMESTAMP,
     created_at               TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at               TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
