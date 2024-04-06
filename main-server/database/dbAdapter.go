@@ -5,13 +5,17 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
 	"main-server/boot"
+	"main-server/domain"
 )
 
 type DbAdapter interface {
-	AuthDb
+	AuthRepo
 }
 
-type AuthDb interface {
+type AuthRepo interface {
+	StoreNewUser(username domain.Username, password domain.Password, ctx context.Context) error
+	StoreUserRefreshToken(id domain.UserId, data domain.RefreshTokenData, ctx context.Context) error
+	GetUserRefreshToken(id domain.UserId, ctx context.Context) error
 }
 
 type PgDbAdapter struct {

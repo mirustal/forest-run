@@ -2,7 +2,7 @@ package domain
 
 type (
 	SignUpRequest struct {
-		Login    Login    `json:"login,omitempty"`
+		Username Username `json:"login,omitempty"`
 		Password Password `json:"password,omitempty"`
 	}
 	SignUpResponse struct {

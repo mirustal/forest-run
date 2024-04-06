@@ -3,16 +3,17 @@ package domain
 import "time"
 
 type (
-	UserId        int
-	Login         string
-	Password      string
-	AuthToken     string
-	AuthTokenData struct {
-		Token     AuthToken `json:"token,omitempty"`
-		CreatedAt time.Time `json:"createdAt"`
+	UserId           int
+	Username         string
+	Password         string
+	RefreshToken     string
+	RefreshTokenData struct {
+		Token     RefreshToken `json:"token,omitempty"`
+		ExpiresAt time.Time    `json:"expiresAt"`
 	}
 )
 
 type ErrorResponse struct {
+	Code    int    `json:"code"`
 	Message string `json:"message,omitempty"`
 }

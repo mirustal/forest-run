@@ -58,6 +58,9 @@ const docTemplate = `{
         "domain.ErrorResponse": {
             "type": "object",
             "properties": {
+                "code": {
+                    "type": "integer"
+                },
                 "message": {
                     "type": "string"
                 }

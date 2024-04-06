@@ -3,7 +3,7 @@
 CREATE TABLE IF NOT EXISTS users
 (
     id                       SERIAL PRIMARY KEY,
-    login                    VARCHAR(64) NOT NULL UNIQUE,
+    username                    VARCHAR(64) NOT NULL UNIQUE,
     password                 CHAR(64)    NOT NULL,
     name                     VARCHAR(64),
     avatar_url               TEXT,
