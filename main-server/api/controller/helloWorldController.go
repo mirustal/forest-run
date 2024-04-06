@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"main/domain"
+	"main-server/domain"
 )
 
 type HelloWorldController struct {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
-	"main/boot"
+	"main-server/boot"
 )
 
 type DbAdapter interface {

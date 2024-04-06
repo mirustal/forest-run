@@ -1,0 +1,32 @@
+basePath: /
+definitions:
+  domain.HelloWorldResponse:
+    properties:
+      message:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  title: Forest Run API
+  version: 0.0.1
+paths:
+  /helloWorld:
+    get:
+      description: hello world
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.HelloWorldResponse'
+      summary: hello world
+      tags:
+      - helloworld
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
