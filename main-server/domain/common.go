@@ -1,16 +1,8 @@
 package domain
 
-import "time"
-
 type (
-	UserId           int
-	Username         string
-	Password         string
-	RefreshToken     string
-	RefreshTokenData struct {
-		Token     RefreshToken `json:"token,omitempty"`
-		ExpiresAt time.Time    `json:"expiresAt"`
-	}
+	UserId   int
+	Username string
 )
 
 type ErrorResponse struct {

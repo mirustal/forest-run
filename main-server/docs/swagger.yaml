@@ -7,11 +7,32 @@ definitions:
       message:
         type: string
     type: object
+  domain.RefreshTokenData:
+    properties:
+      expiresAt:
+        type: string
+      token:
+        type: string
+    type: object
+  domain.SignInRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  domain.SignInResponse:
+    properties:
+      authToken:
+        type: string
+      refreshToken:
+        $ref: '#/definitions/domain.RefreshTokenData'
+    type: object
   domain.SignUpRequest:
     properties:
-      login:
-        type: string
       password:
+        type: string
+      username:
         type: string
     type: object
   domain.SignUpResponse:
@@ -22,9 +43,41 @@ info:
   title: Forest Run API
   version: 0.0.1
 paths:
+  /auth/sign-in:
+    post:
+      description: Log into app and get access tokens
+      parameters:
+      - description: SignIn data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.SignInRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.SignInResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+      summary: Sign In
+      tags:
+      - auth
   /auth/sign-up:
     post:
-      description: Register in app and get access token
+      description: Register in app
       parameters:
       - description: SignUp data
         in: body

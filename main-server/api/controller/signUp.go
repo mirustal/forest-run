@@ -9,41 +9,29 @@ import (
 	"net/http"
 )
 
-type SignUp struct {
+type signUp struct {
 	db     database.AuthRepo
 	logger *zap.Logger
 }
 
-func NewSignUp(db database.AuthRepo, logger *zap.Logger) *SignUp {
-	return &SignUp{
+func NewSignUp(db database.AuthRepo, logger *zap.Logger) Controller {
+	return &signUp{
 		db:     db,
 		logger: logger,
 	}
 }
 
-func (c *SignUp) Handle(ctx *fiber.Ctx) error {
+func (c signUp) Handle(ctx *fiber.Ctx) error {
 	request := new(domain.SignUpRequest)
 	if err := ctx.BodyParser(request); err != nil {
 		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "can't parse request json"})
 	}
 
-	if len(request.Username) == 0 {
-		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "empty login"})
+	if err := request.Validate(); err != nil {
+		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: err.Error()})
 	}
 
-	if len(request.Username) > 64 {
-		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "too long login"})
-	}
-
-	if len(request.Password) == 0 {
-		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "empty password"})
-	}
-
-	if len(request.Password) > 64 {
-		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "too long password"})
-	}
-
-	err := c.db.StoreNewUser(request.Username, request.Password, ctx.UserContext())
+	err := c.db.StoreNewUser(request.Username, request.Password.Hash(), ctx.UserContext())
 	if err != nil {
 		var usernameAlreadyTakenError database.UsernameAlreadyTakenError
 		if errors.As(err, &usernameAlreadyTakenError) {

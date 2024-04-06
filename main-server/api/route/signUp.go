@@ -10,7 +10,7 @@ import (
 // SignUp
 //
 //	@Summary		Sign Up
-//	@Description	Register in app and get access token
+//	@Description	Register in app
 //	@Tags			auth
 //	@Accepts		json
 //	@Produce		json
