@@ -11,15 +11,15 @@ import (
 	_ "main-server/docs"
 )
 
-// @title Forest Run API
-// @version 0.0.1
+//	@title		Forest Run API
+//	@version	0.0.1
 
-// @host localhost:8080
-// @BasePath /
+//	@host		localhost:8080
+//	@BasePath	/
 
-// @securityDefinitions.apiKey ApiKeyAuth
-// @in header
-// @name Authorization
+//	@securityDefinitions.apiKey	ApiKeyAuth
+//	@in							header
+//	@name						Authorization
 
 func main() {
 	env, err := boot.NewEnv()
