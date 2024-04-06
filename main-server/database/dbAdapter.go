@@ -16,6 +16,7 @@ type DbAdapter interface {
 
 type PgDbAdapter struct {
 	dbPool *pgxpool.Pool
+	logger *zap.Logger
 }
 
 func NewAdapter(env *boot.Env, logger *zap.Logger) (DbAdapter, error) {
@@ -27,5 +28,6 @@ func NewAdapter(env *boot.Env, logger *zap.Logger) (DbAdapter, error) {
 
 	return &PgDbAdapter{
 		dbPool: dbPool,
+		logger: logger,
 	}, nil
 }
