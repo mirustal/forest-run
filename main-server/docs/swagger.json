@@ -8,21 +8,39 @@
     "host": "localhost:8080",
     "basePath": "/",
     "paths": {
-        "/helloWorld": {
-            "get": {
-                "description": "hello world",
+        "/auth/sign-up": {
+            "post": {
+                "description": "Register in app and get access token",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "helloworld"
+                    "auth"
                 ],
-                "summary": "hello world",
+                "summary": "Sign Up",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.HelloWorldResponse"
+                            "$ref": "#/definitions/domain.SignUpResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     }
                 }
@@ -30,13 +48,16 @@
         }
     },
     "definitions": {
-        "domain.HelloWorldResponse": {
+        "domain.ErrorResponse": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string"
                 }
             }
+        },
+        "domain.SignUpResponse": {
+            "type": "object"
         }
     },
     "securityDefinitions": {

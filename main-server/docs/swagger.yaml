@@ -1,9 +1,11 @@
 basePath: /
 definitions:
-  domain.HelloWorldResponse:
+  domain.ErrorResponse:
     properties:
       message:
         type: string
+    type: object
+  domain.SignUpResponse:
     type: object
 host: localhost:8080
 info:
@@ -11,19 +13,31 @@ info:
   title: Forest Run API
   version: 0.0.1
 paths:
-  /helloWorld:
-    get:
-      description: hello world
+  /auth/sign-up:
+    post:
+      description: Register in app and get access token
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.HelloWorldResponse'
-      summary: hello world
+            $ref: '#/definitions/domain.SignUpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+      summary: Sign Up
       tags:
-      - helloworld
+      - auth
 securityDefinitions:
   ApiKeyAuth:
     in: header
