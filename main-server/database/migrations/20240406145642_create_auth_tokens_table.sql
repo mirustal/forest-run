@@ -10,5 +10,5 @@ CREATE TABLE IF NOT EXISTS auth_tokens
 
 -- +goose Down
 -- +goose StatementBegin
-drop table if EXISTS auth_tokens;
+DROP TABLE IF EXISTS auth_tokens;
 -- +goose StatementEnd
