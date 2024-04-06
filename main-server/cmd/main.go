@@ -1,16 +1,16 @@
 package main
 
 import (
+	"github.com/gofiber/contrib/fiberzap/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/swagger"
 	"go.uber.org/zap"
 	"main-server/api/route"
 	"main-server/boot"
 	"main-server/database"
 	_ "main-server/docs"
-
-	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
 //	@title		Forest Run API
@@ -34,6 +34,7 @@ func main() {
 
 	app := fiber.New()
 	app.Use(recover.New())
+	app.Use(fiberzap.New(fiberzap.Config{Logger: logger}))
 
 	db, err := database.NewAdapter(env, logger)
 	if err != nil {
