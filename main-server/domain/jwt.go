@@ -10,14 +10,6 @@ type (
 		ExpiresAt time.Time    `json:"expiresAt"`
 	}
 	JWTBody struct {
-		// TODO
+		UserId UserId `json:"userId"`
 	}
 )
-
-func NewRefreshToken(salt string) RefreshToken {
-	panic("not implemented")
-}
-
-func NewJWTToken(body JWTBody, salt string) JWTToken {
-	panic("not implemented")
-}

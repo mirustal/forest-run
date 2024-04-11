@@ -11,6 +11,7 @@ import (
 	"main-server/boot"
 	"main-server/database"
 	_ "main-server/docs"
+	"main-server/utils"
 )
 
 //	@title		Forest Run API
@@ -32,6 +33,11 @@ func main() {
 	logger := boot.NewLogger(env)
 	defer logger.Sync()
 
+	jwtProvider, err := utils.NewJWTProvider(env.SecureKey)
+	if err != nil {
+		panic(err)
+	}
+
 	app := fiber.New()
 	app.Use(recover.New())
 	app.Use(fiberzap.New(fiberzap.Config{Logger: logger}))
@@ -47,7 +53,7 @@ func main() {
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 	}))
 
-	route.Setup(app, env, logger, db)
+	route.Setup(app, env, logger, db, jwtProvider)
 
 	if env.AppEnv == boot.DevEnv {
 		app.Get("/swagger/*", swagger.HandlerDefault)
