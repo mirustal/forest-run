@@ -19,6 +19,7 @@ type Env struct {
 	MaxLogFileBackups int    `mapstructure:"MAX_LOG_FILE_BACKUP"`
 	MaxLogFileAge     int    `mapstructure:"MAX_LOG_FILE_AGE_DAYS"`
 	DBUrl             string `mapstructure:"DB_URL"`
+	SecureKey         string `mapstructure:"SECURE_KEY"`
 }
 
 func NewEnv() (*Env, error) {
