@@ -1,7 +1,8 @@
-package controller
+package auth
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"main-server/api/controller"
 	"main-server/api/middleware"
 	"main-server/database"
 	"main-server/domain"
@@ -15,7 +16,7 @@ type refreshTokens struct {
 	jwt jwt.Provider
 }
 
-func NewRefreshTokens(db database.DbAdapter, jwt jwt.Provider) Controller {
+func NewRefreshTokens(db database.DbAdapter, jwt jwt.Provider) controller.Controller {
 	return refreshTokens{db: db, jwt: jwt}
 }
 

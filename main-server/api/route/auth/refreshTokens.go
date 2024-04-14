@@ -1,12 +1,13 @@
-package route
+package auth
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"main-server/api/controller"
+	"main-server/api/controller/auth"
 	"main-server/database"
 	"main-server/jwt"
 )
 
+// InitRefreshTokens
 // @Summary		Refresh Tokens
 // @Description	Refresh JWT Tokens pair
 // @Tags			auth
@@ -17,7 +18,7 @@ import (
 // @Failure		400,401	{object}	domain.ErrorResponse
 // @Failure		500		{object}	domain.ErrorResponse
 // @Router			/api/refresh [post]
-func initRefreshTokens(group fiber.Router, jwt jwt.Provider, db database.DbAdapter) {
-	c := controller.NewRefreshTokens(db, jwt)
+func InitRefreshTokens(group fiber.Router, jwt jwt.Provider, db database.DbAdapter) {
+	c := auth.NewRefreshTokens(db, jwt)
 	group.Post("/refresh", c.Handle)
 }

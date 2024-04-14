@@ -1,8 +1,9 @@
-package controller
+package auth
 
 import (
 	"errors"
 	"github.com/gofiber/fiber/v2"
+	"main-server/api/controller"
 	"main-server/database"
 	"main-server/domain"
 	"net/http"
@@ -12,7 +13,7 @@ type signUp struct {
 	db database.AuthRepo
 }
 
-func NewSignUp(db database.AuthRepo) Controller {
+func NewSignUp(db database.AuthRepo) controller.Controller {
 	return &signUp{
 		db: db,
 	}

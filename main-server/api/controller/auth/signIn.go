@@ -1,7 +1,8 @@
-package controller
+package auth
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"main-server/api/controller"
 	"main-server/database"
 	"main-server/domain"
 	"main-server/jwt"
@@ -13,7 +14,7 @@ type signIn struct {
 	jwt jwt.Provider
 }
 
-func NewSignIn(db database.DbAdapter, jwt jwt.Provider) Controller {
+func NewSignIn(db database.DbAdapter, jwt jwt.Provider) controller.Controller {
 	return &signIn{db: db, jwt: jwt}
 }
 
