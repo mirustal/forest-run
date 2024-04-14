@@ -5,7 +5,7 @@ import (
 	"go.uber.org/zap"
 	"main-server/api/controller"
 	"main-server/database"
-	"main-server/utils"
+	"main-server/jwt"
 )
 
 // signUp
@@ -20,7 +20,7 @@ import (
 //	@Failure		400,401	{object}	domain.ErrorResponse
 //	@Failure		500		{object}	domain.ErrorResponse
 //	@Router			/auth/sign-in [post]
-func initSignIn(app *fiber.App, db database.DbAdapter, logger *zap.Logger, jwt utils.JWTProvider) {
+func initSignIn(app *fiber.App, db database.DbAdapter, logger *zap.Logger, jwt jwt.Provider) {
 	c := controller.NewSignIn(db, logger)
 	app.Post("/auth/sign-in", c.Handle)
 }
