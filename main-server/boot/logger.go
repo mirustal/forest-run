@@ -6,7 +6,7 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-func NewLogger(env *Env) *zap.Logger {
+func NewLogger(env Env) *zap.Logger {
 	if env.AppEnv == ProdEnv {
 
 		w := zapcore.AddSync(&lumberjack.Logger{

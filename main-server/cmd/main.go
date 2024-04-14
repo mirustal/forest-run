@@ -11,7 +11,7 @@ import (
 	"main-server/boot"
 	"main-server/database"
 	_ "main-server/docs"
-	"main-server/utils"
+	"main-server/jwt"
 )
 
 //	@title		Forest Run API
@@ -33,7 +33,7 @@ func main() {
 	logger := boot.NewLogger(env)
 	defer logger.Sync()
 
-	jwtProvider, err := utils.NewJWTProvider(env.SecureKey)
+	jwtProvider, err := jwt.NewProvider(env.JWTConfig)
 	if err != nil {
 		panic(err)
 	}
@@ -42,7 +42,7 @@ func main() {
 	app.Use(recover.New())
 	app.Use(fiberzap.New(fiberzap.Config{Logger: logger}))
 
-	db, err := database.NewAdapter(env, logger)
+	db, err := database.NewAdapter(env.DBConfig, logger)
 	if err != nil {
 		logger.Fatal("Error on initializing DB: ", zap.Error(err))
 		panic(err)

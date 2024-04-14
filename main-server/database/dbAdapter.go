@@ -24,7 +24,7 @@ type PgDbAdapter struct {
 	logger *zap.Logger
 }
 
-func NewAdapter(env *boot.Env, logger *zap.Logger) (DbAdapter, error) {
+func NewAdapter(env boot.DBConfig, logger *zap.Logger) (DbAdapter, error) {
 	dbPool, err := pgxpool.New(context.Background(), env.DBUrl)
 	if err != nil {
 		logger.Fatal("Unable to create connection pool: ", zap.Error(err))
