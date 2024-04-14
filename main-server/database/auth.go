@@ -89,7 +89,7 @@ func (p PgDbAdapter) GetUserRefreshToken(id domain.UserId, ctx context.Context) 
 		return data, err
 	}
 
-	row := t.QueryRow(ctx, "SELECT id, username, password, refresh_token, refresh_token_expires_at FROM users WHERE id=$1", id)
+	row := t.QueryRow(ctx, "SELECT refresh_token, refresh_token_expires_at FROM users WHERE id=$1", id)
 	err = row.Scan(&data.Token, &data.ExpiresAt)
 	if err != nil {
 		return data, err

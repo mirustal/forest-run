@@ -56,8 +56,8 @@ info:
   version: 0.0.1
 paths:
   /api/refresh:
-    get:
-      description: hello bitch
+    post:
+      description: Refresh JWT Tokens pair
       parameters:
       - description: Refresh tokens data
         in: body

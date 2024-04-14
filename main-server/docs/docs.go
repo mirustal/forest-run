@@ -16,13 +16,13 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/api/refresh": {
-            "get": {
+            "post": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "hello bitch",
+                "description": "Refresh JWT Tokens pair",
                 "produces": [
                     "application/json"
                 ],
