@@ -16,7 +16,7 @@ type AuthRepo interface {
 	StoreNewUser(username domain.Username, password domain.HashedPassword, ctx context.Context) error
 	GetUserByUsername(username domain.Username, ctx context.Context) (domain.User, error)
 	StoreUserRefreshToken(id domain.UserId, data domain.RefreshTokenData, ctx context.Context) error
-	GetUserRefreshToken(id domain.UserId, ctx context.Context) error
+	GetUserRefreshToken(id domain.UserId, ctx context.Context) (data domain.RefreshTokenData, err error)
 }
 
 type PgDbAdapter struct {

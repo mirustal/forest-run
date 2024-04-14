@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/jackc/pgx/v5/pgconn"
 	"main-server/domain"
 )
@@ -61,11 +62,38 @@ func (p PgDbAdapter) GetUserById(id domain.UserId, ctx context.Context) (user do
 }
 
 func (p PgDbAdapter) StoreUserRefreshToken(id domain.UserId, data domain.RefreshTokenData, ctx context.Context) error {
-	//TODO implement me
-	panic("implement me")
+	t, err := p.dbPool.Begin(ctx)
+	if err != nil {
+		defer t.Rollback(ctx)
+		return err
+	}
+
+	c, err := t.Exec(ctx, "UPDATE users SET refresh_token=$1, refresh_token_expires_at=$2 WHERE id=$3", data.Token, data.ExpiresAt, id)
+	if err != nil {
+		defer t.Rollback(ctx)
+		return nil
+	}
+
+	if c.RowsAffected() == 0 {
+		defer t.Rollback(ctx)
+		return errors.New(fmt.Sprintf("no rows were affected when storing refresh token for user %v", id))
+	}
+
+	return t.Commit(ctx)
 }
 
-func (p PgDbAdapter) GetUserRefreshToken(id domain.UserId, ctx context.Context) error {
-	//TODO implement me
-	panic("implement me")
+func (p PgDbAdapter) GetUserRefreshToken(id domain.UserId, ctx context.Context) (data domain.RefreshTokenData, err error) {
+	t, err := p.dbPool.Begin(ctx)
+	defer t.Rollback(ctx)
+	if err != nil {
+		return data, err
+	}
+
+	row := t.QueryRow(ctx, "SELECT id, username, password, refresh_token, refresh_token_expires_at FROM users WHERE id=$1", id)
+	err = row.Scan(&data.Token, &data.ExpiresAt)
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
 }
