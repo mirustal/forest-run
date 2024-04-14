@@ -25,7 +25,7 @@ func (c signUp) Handle(ctx *fiber.Ctx) error {
 		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "can't parse request json"})
 	}
 
-	if err := request.Validate(); err != nil {
+	if err := Validate(*request); err != nil {
 		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: err.Error()})
 	}
 
