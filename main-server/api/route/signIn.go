@@ -21,6 +21,6 @@ import (
 //	@Failure		500		{object}	domain.ErrorResponse
 //	@Router			/auth/sign-in [post]
 func initSignIn(app *fiber.App, db database.DbAdapter, logger *zap.Logger, jwt jwt.Provider) {
-	c := controller.NewSignIn(db, logger)
+	c := controller.NewSignIn(db, jwt, logger)
 	app.Post("/auth/sign-in", c.Handle)
 }

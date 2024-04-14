@@ -30,8 +30,8 @@ func (p PgDbAdapter) StoreNewUser(username domain.Username, password domain.Hash
 
 func (p PgDbAdapter) GetUserByUsername(username domain.Username, ctx context.Context) (user domain.User, err error) {
 	t, err := p.dbPool.Begin(ctx)
+	defer t.Rollback(ctx)
 	if err != nil {
-		t.Rollback(ctx)
 		return user, err
 	}
 
@@ -41,13 +41,13 @@ func (p PgDbAdapter) GetUserByUsername(username domain.Username, ctx context.Con
 		return user, err
 	}
 
-	return user, t.Commit(ctx)
+	return user, nil
 }
 
 func (p PgDbAdapter) GetUserById(id domain.UserId, ctx context.Context) (user domain.User, err error) {
 	t, err := p.dbPool.Begin(ctx)
+	defer t.Rollback(ctx)
 	if err != nil {
-		t.Rollback(ctx)
 		return user, err
 	}
 
@@ -57,7 +57,7 @@ func (p PgDbAdapter) GetUserById(id domain.UserId, ctx context.Context) (user do
 		return user, err
 	}
 
-	return user, t.Commit(ctx)
+	return user, nil
 }
 
 func (p PgDbAdapter) StoreUserRefreshToken(id domain.UserId, data domain.RefreshTokenData, ctx context.Context) error {

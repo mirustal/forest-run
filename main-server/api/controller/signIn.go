@@ -5,17 +5,18 @@ import (
 	"go.uber.org/zap"
 	"main-server/database"
 	"main-server/domain"
+	"main-server/jwt"
 	"net/http"
-	"time"
 )
 
 type signIn struct {
 	db     database.DbAdapter
 	logger *zap.Logger
+	jwt    jwt.Provider
 }
 
-func NewSignIn(db database.DbAdapter, logger *zap.Logger) Controller {
-	return &signIn{db: db, logger: logger}
+func NewSignIn(db database.DbAdapter, jwt jwt.Provider, logger *zap.Logger) Controller {
+	return &signIn{db: db, jwt: jwt, logger: logger}
 }
 
 func (s signIn) Handle(ctx *fiber.Ctx) error {
@@ -37,24 +38,25 @@ func (s signIn) Handle(ctx *fiber.Ctx) error {
 		return ctx.Status(http.StatusUnauthorized).JSON(domain.ErrorResponse{Code: domain.CodeWrongPassword, Message: "password not matches"})
 	}
 
-	rt := domain.NewRefreshToken("TODO")
-	jwt := domain.NewJWTToken(domain.JWTBody{ /*TODO*/ }, "TODO")
-
-	rtData := domain.RefreshTokenData{
-		Token:     rt,
-		ExpiresAt: time.Time{}, // TODO
+	rt, err := s.jwt.CreateRefreshToken()
+	if err != nil {
+		return ctx.Status(http.StatusInternalServerError).JSON(domain.ErrorResponse{Message: "error on creating refresh token"})
 	}
 
-	err = s.db.StoreUserRefreshToken(user.Id, rtData, ctx.UserContext())
+	t, err := s.jwt.CreateToken(domain.JWTBody{UserId: user.Id})
+	if err != nil {
+		return ctx.Status(http.StatusInternalServerError).JSON(domain.ErrorResponse{Message: "error on creating jwt token"})
+	}
 
+	err = s.db.StoreUserRefreshToken(user.Id, rt, ctx.UserContext())
 	if err != nil {
 		return ctx.Status(http.StatusInternalServerError).JSON(domain.ErrorResponse{Message: "error on storing token"})
 	}
 
 	return ctx.Status(http.StatusOK).JSON(domain.SignInResponse{
 		AuthDataResponse: domain.AuthDataResponse{
-			RefreshToken: rtData,
-			AuthToken:    jwt,
+			RefreshToken: rt,
+			AuthToken:    t,
 		},
 	})
 }
