@@ -33,9 +33,11 @@ func main() {
 	logger := boot.NewLogger(env)
 	defer logger.Sync()
 
+	logger.Sugar().Info("loaded env: ", env)
+
 	jwtProvider, err := jwt.NewProvider(env.JWTConfig)
 	if err != nil {
-		panic(err)
+		logger.Fatal("Error on initializing JWT: ", zap.Error(err))
 	}
 
 	app := fiber.New()
@@ -45,7 +47,6 @@ func main() {
 	db, err := database.NewAdapter(env.DBConfig, logger)
 	if err != nil {
 		logger.Fatal("Error on initializing DB: ", zap.Error(err))
-		panic(err)
 	}
 
 	app.Use(cors.New(cors.Config{

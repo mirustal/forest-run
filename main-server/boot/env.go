@@ -1,7 +1,6 @@
 package boot
 
 import (
-	"fmt"
 	"log"
 	"time"
 
@@ -56,8 +55,6 @@ func NewEnv() (env Env, err error) {
 	if env.AppEnv == DevEnv {
 		log.Println("The App is running in development env")
 	}
-
-	fmt.Print(env)
 
 	return env, nil
 }
