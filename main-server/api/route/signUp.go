@@ -2,7 +2,6 @@ package route
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"go.uber.org/zap"
 	"main-server/api/controller"
 	"main-server/database"
 )
@@ -19,7 +18,7 @@ import (
 //	@Failure		400,409	{object}	domain.ErrorResponse
 //	@Failure		500		{object}	domain.ErrorResponse
 //	@Router			/auth/sign-up [post]
-func initSignUp(app *fiber.App, db database.DbAdapter, logger *zap.Logger) {
-	c := controller.NewSignUp(db, logger)
+func initSignUp(app *fiber.App, db database.DbAdapter) {
+	c := controller.NewSignUp(db)
 	app.Post("/auth/sign-up", c.Handle)
 }

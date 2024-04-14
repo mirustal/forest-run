@@ -2,7 +2,6 @@ package route
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"go.uber.org/zap"
 	"main-server/api/controller"
 	"main-server/database"
 	"main-server/jwt"
@@ -20,7 +19,7 @@ import (
 //	@Failure		400,401	{object}	domain.ErrorResponse
 //	@Failure		500		{object}	domain.ErrorResponse
 //	@Router			/auth/sign-in [post]
-func initSignIn(app *fiber.App, db database.DbAdapter, logger *zap.Logger, jwt jwt.Provider) {
-	c := controller.NewSignIn(db, jwt, logger)
+func initSignIn(app *fiber.App, db database.DbAdapter, jwt jwt.Provider) {
+	c := controller.NewSignIn(db, jwt)
 	app.Post("/auth/sign-in", c.Handle)
 }

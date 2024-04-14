@@ -3,21 +3,18 @@ package controller
 import (
 	"errors"
 	"github.com/gofiber/fiber/v2"
-	"go.uber.org/zap"
 	"main-server/database"
 	"main-server/domain"
 	"net/http"
 )
 
 type signUp struct {
-	db     database.AuthRepo
-	logger *zap.Logger
+	db database.AuthRepo
 }
 
-func NewSignUp(db database.AuthRepo, logger *zap.Logger) Controller {
+func NewSignUp(db database.AuthRepo) Controller {
 	return &signUp{
-		db:     db,
-		logger: logger,
+		db: db,
 	}
 }
 

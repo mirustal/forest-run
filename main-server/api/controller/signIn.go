@@ -2,7 +2,6 @@ package controller
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"go.uber.org/zap"
 	"main-server/database"
 	"main-server/domain"
 	"main-server/jwt"
@@ -10,13 +9,12 @@ import (
 )
 
 type signIn struct {
-	db     database.DbAdapter
-	logger *zap.Logger
-	jwt    jwt.Provider
+	db  database.DbAdapter
+	jwt jwt.Provider
 }
 
-func NewSignIn(db database.DbAdapter, jwt jwt.Provider, logger *zap.Logger) Controller {
-	return &signIn{db: db, jwt: jwt, logger: logger}
+func NewSignIn(db database.DbAdapter, jwt jwt.Provider) Controller {
+	return &signIn{db: db, jwt: jwt}
 }
 
 func (s signIn) Handle(ctx *fiber.Ctx) error {

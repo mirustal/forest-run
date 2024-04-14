@@ -54,7 +54,7 @@ func main() {
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 	}))
 
-	route.Setup(app, env, logger, db, jwtProvider)
+	route.Setup(app, db, jwtProvider)
 
 	if env.AppEnv == boot.DevEnv {
 		app.Get("/swagger/*", swagger.HandlerDefault)
