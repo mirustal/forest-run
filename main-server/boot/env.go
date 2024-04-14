@@ -1,6 +1,7 @@
 package boot
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -13,36 +14,36 @@ const (
 )
 
 type Env struct {
-	AppEnv        string `mapstructure:"APP_ENV"`
-	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
-	LoggerConfig
-	JWTConfig
-	DBConfig
+	AppEnv        string `yaml:"appEnv"`
+	ServerAddress string `yaml:"serverAddress"`
+	LoggerConfig  `yaml:"loggerConfig"`
+	JWTConfig     `yaml:"JWTConfig"`
+	DBConfig      `yaml:"DBConfig"`
 }
 
 type LoggerConfig struct {
-	LogSaveFile       string `mapstructure:"LOG_SAVE_FILE"`
-	MaxLogFileSize    int    `mapstructure:"MAX_LOG_FILE_SIZE_MB"`
-	MaxLogFileBackups int    `mapstructure:"MAX_LOG_FILE_BACKUP"`
-	MaxLogFileAge     int    `mapstructure:"MAX_LOG_FILE_AGE_DAYS"`
+	LogSaveFile       string `yaml:"logSaveFile"`
+	MaxLogFileSize    int    `yaml:"maxLogFileSize"`
+	MaxLogFileBackups int    `yaml:"maxLogFileBackups"`
+	MaxLogFileAge     int    `yaml:"maxLogFileAge"`
 }
 
 type DBConfig struct {
-	DBUrl string `mapstructure:"DB_URL"`
+	DBUrl string `yaml:"DBUrl"`
 }
 
 type JWTConfig struct {
-	SecureKey            string        `mapstructure:"SECURE_KEY"`
-	JWTTokenLifeTime     time.Duration `mapstructure:"JWT_TOKEN_LIFE_TIME"`
-	RefreshTokenLifeTime time.Duration `mapstructure:"REFRESH_TOKEN_LIFE_TIME"`
+	SecureKey            string        `yaml:"secureKey"`
+	JWTTokenLifeTime     time.Duration `yaml:"JWTTokenLifeTime"`
+	RefreshTokenLifeTime time.Duration `yaml:"refreshTokenLifeTime"`
 }
 
 func NewEnv() (env Env, err error) {
-	viper.SetConfigFile(".env")
+	viper.SetConfigFile("conf.yaml")
 
 	err = viper.ReadInConfig()
 	if err != nil {
-		log.Fatal("Can't find the file .env : ", err)
+		log.Fatal("Can't find the config file : ", err)
 		return env, err
 	}
 
@@ -55,6 +56,8 @@ func NewEnv() (env Env, err error) {
 	if env.AppEnv == DevEnv {
 		log.Println("The App is running in development env")
 	}
+
+	fmt.Print(env)
 
 	return env, nil
 }

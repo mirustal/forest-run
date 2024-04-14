@@ -1,0 +1,13 @@
+appEnv: dev
+serverAddress: localhost:8080
+loggerConfig:
+  logSaveFile: logs/log.log
+  maxLogFileSize: 5
+  maxLogFileBackups: 1
+  maxLogFileAge: 30
+DBConfig:
+  DBUrl: postgres://postgres:qwerty123@localhost:5432/forest-run
+JWTConfig:
+  secureKey: qwerty123
+  JWTTokenLifeTime: 1800000000000 #30 mins
+  refreshTokenLifeTime: 2592000000000000 #30 days
