@@ -15,6 +15,60 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/refresh": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "hello bitch",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Refresh Tokens",
+                "parameters": [
+                    {
+                        "description": "Refresh tokens data",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.RefreshTokensRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.RefreshTokensResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/sign-in": {
             "post": {
                 "description": "Log into app and get access tokens",
@@ -126,13 +180,32 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.RefreshTokenData": {
+        "domain.JWTTokenData": {
             "type": "object",
             "properties": {
                 "expiresAt": {
                     "type": "string"
                 },
                 "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.RefreshTokensRequest": {
+            "type": "object",
+            "properties": {
+                "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.RefreshTokensResponse": {
+            "type": "object",
+            "properties": {
+                "authToken": {
+                    "$ref": "#/definitions/domain.JWTTokenData"
+                },
+                "refreshToken": {
                     "type": "string"
                 }
             }
@@ -152,10 +225,10 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "authToken": {
-                    "type": "string"
+                    "$ref": "#/definitions/domain.JWTTokenData"
                 },
                 "refreshToken": {
-                    "$ref": "#/definitions/domain.RefreshTokenData"
+                    "type": "string"
                 }
             }
         },

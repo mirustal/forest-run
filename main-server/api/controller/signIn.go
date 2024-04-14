@@ -53,7 +53,7 @@ func (s signIn) Handle(ctx *fiber.Ctx) error {
 
 	return ctx.Status(http.StatusOK).JSON(domain.SignInResponse{
 		AuthDataResponse: domain.AuthDataResponse{
-			RefreshToken: rt,
+			RefreshToken: *rt.Token,
 			AuthToken:    t,
 		},
 	})

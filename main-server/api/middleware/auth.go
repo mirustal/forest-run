@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-const authData = "jwt.auth-data"
+const authDataKey = "jwt.auth-data"
 
 func InitAuth(group fiber.Router, jwt jwt.Provider) {
 	group.Use(auth{
@@ -45,10 +45,10 @@ func (a auth) authorize(ctx *fiber.Ctx) error {
 		})
 	}
 
-	ctx.Locals(authData, authData)
+	ctx.Locals(authDataKey, authData)
 	return ctx.Next()
 }
 
 func GetAuthData(c *fiber.Ctx) domain.JWTBody {
-	return c.Locals(authData).(domain.JWTBody)
+	return c.Locals(authDataKey).(domain.JWTBody)
 }

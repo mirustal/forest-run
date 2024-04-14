@@ -35,10 +35,7 @@ func main() {
 
 	logger.Sugar().Info("loaded env: ", env)
 
-	jwtProvider, err := jwt.NewProvider(env.JWTConfig)
-	if err != nil {
-		logger.Fatal("Error on initializing JWT: ", zap.Error(err))
-	}
+	jwtProvider := jwt.NewProvider(env.JWTConfig)
 
 	app := fiber.New()
 	app.Use(recover.New())

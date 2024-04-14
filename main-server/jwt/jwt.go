@@ -11,27 +11,15 @@ import (
 )
 
 type Provider interface {
-	CreateToken(body domain.JWTBody) (domain.JWTToken, error)
+	CreateToken(body domain.JWTBody) (domain.JWTTokenData, error)
 	CreateRefreshToken() (domain.RefreshTokenData, error)
 	Parse(token domain.JWTToken) (domain.JWTBody, error)
 }
 
-func NewProvider(cfg boot.JWTConfig) (Provider, error) {
-	if cfg.JWTTokenLifeTime <= 0 {
-		return nil, errors.New("JWTTokenLifeTime <= 0")
-	}
-
-	if len(cfg.SecureKey) == 0 {
-		return nil, errors.New("length of secure key is 0")
-	}
-
-	if cfg.RefreshTokenLifeTime <= 0 {
-		return nil, errors.New("RefreshTokenLifeTime <= 0")
-	}
-
+func NewProvider(cfg boot.JWTConfig) Provider {
 	return jwtProvider{
 		JWTConfig: cfg,
-	}, nil
+	}
 }
 
 type jwtProvider struct {
@@ -43,20 +31,25 @@ type jwtClaims struct {
 	jwt.RegisteredClaims
 }
 
-func (j jwtProvider) CreateToken(body domain.JWTBody) (token domain.JWTToken, err error) {
-	t := jwt.NewWithClaims(jwt.SigningMethodRS256, jwtClaims{
+func (j jwtProvider) CreateToken(body domain.JWTBody) (token domain.JWTTokenData, err error) {
+	expTime := time.Now().Add(j.JWTTokenLifeTime)
+
+	t := jwt.NewWithClaims(jwt.SigningMethodHS256, jwtClaims{
 		JWTBody: body,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(j.JWTTokenLifeTime)),
+			ExpiresAt: jwt.NewNumericDate(expTime),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 		},
 	})
-	s, err := t.SignedString(j.SecureKey)
+	s, err := t.SignedString([]byte(j.SecureKey))
 	if err != nil {
 		return token, err
 	}
 
-	return domain.JWTToken(s), err
+	return domain.JWTTokenData{
+		Token:     domain.JWTToken(s),
+		ExpiresAt: expTime,
+	}, err
 }
 
 func (j jwtProvider) Parse(token domain.JWTToken) (body domain.JWTBody, err error) {
@@ -89,8 +82,13 @@ func (j jwtProvider) CreateRefreshToken() (data domain.RefreshTokenData, err err
 		return data, err
 	}
 
-	data.Token = domain.RefreshToken(fmt.Sprintf("%x", b))
-	data.ExpiresAt = time.Now().Add(j.RefreshTokenLifeTime)
+	t := domain.RefreshToken(fmt.Sprintf("%x", b))
+	exp := time.Now().Add(j.RefreshTokenLifeTime)
+
+	data = domain.RefreshTokenData{
+		Token:     &t,
+		ExpiresAt: &exp,
+	}
 
 	return data, err
 }

@@ -7,11 +7,23 @@ definitions:
       message:
         type: string
     type: object
-  domain.RefreshTokenData:
+  domain.JWTTokenData:
     properties:
       expiresAt:
         type: string
       token:
+        type: string
+    type: object
+  domain.RefreshTokensRequest:
+    properties:
+      refreshToken:
+        type: string
+    type: object
+  domain.RefreshTokensResponse:
+    properties:
+      authToken:
+        $ref: '#/definitions/domain.JWTTokenData'
+      refreshToken:
         type: string
     type: object
   domain.SignInRequest:
@@ -24,9 +36,9 @@ definitions:
   domain.SignInResponse:
     properties:
       authToken:
-        type: string
+        $ref: '#/definitions/domain.JWTTokenData'
       refreshToken:
-        $ref: '#/definitions/domain.RefreshTokenData'
+        type: string
     type: object
   domain.SignUpRequest:
     properties:
@@ -43,6 +55,40 @@ info:
   title: Forest Run API
   version: 0.0.1
 paths:
+  /api/refresh:
+    get:
+      description: hello bitch
+      parameters:
+      - description: Refresh tokens data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.RefreshTokensRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.RefreshTokensResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Refresh Tokens
+      tags:
+      - auth
   /auth/sign-in:
     post:
       description: Log into app and get access tokens

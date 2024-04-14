@@ -1,8 +1,6 @@
 package domain
 
-import (
-	"errors"
-)
+import "errors"
 
 type (
 	SignUpRequest struct {
@@ -32,3 +30,26 @@ func (r SignUpRequest) Validate() error {
 
 	return nil
 }
+
+type AuthDataResponse struct {
+	RefreshToken RefreshToken `json:"refreshToken"`
+	AuthToken    JWTTokenData `json:"authToken,omitempty"`
+}
+
+type (
+	SignInRequest struct {
+		SignUpRequest
+	}
+	SignInResponse struct {
+		AuthDataResponse
+	}
+)
+
+type (
+	RefreshTokensRequest struct {
+		RefreshToken RefreshToken `json:"refreshToken"`
+	}
+	RefreshTokensResponse struct {
+		AuthDataResponse
+	}
+)

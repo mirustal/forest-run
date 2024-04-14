@@ -13,4 +13,5 @@ func Setup(app *fiber.App, db database.DbAdapter, jwt jwt.Provider) {
 
 	protectedRouter := app.Group("/api")
 	middleware.InitAuth(protectedRouter, jwt)
+	initRefreshTokens(protectedRouter, jwt, db)
 }
