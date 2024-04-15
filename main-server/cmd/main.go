@@ -12,6 +12,7 @@ import (
 	"main-server/database"
 	_ "main-server/docs"
 	"main-server/jwt"
+	"main-server/notifications"
 )
 
 //	@title		Forest Run API
@@ -46,12 +47,14 @@ func main() {
 		logger.Fatal("Error on initializing DB: ", zap.Error(err))
 	}
 
+	notifs := notifications.NewManager(db)
+
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 	}))
 
-	route.Setup(app, db, jwtProvider)
+	route.Setup(app, db, jwtProvider, notifs)
 
 	if env.AppEnv == boot.DevEnv {
 		app.Get("/swagger/*", swagger.HandlerDefault)

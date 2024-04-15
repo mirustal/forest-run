@@ -6,9 +6,10 @@ import (
 	"main-server/api/route/auth"
 	"main-server/database"
 	"main-server/jwt"
+	"main-server/notifications"
 )
 
-func Setup(app *fiber.App, db database.DbAdapter, jwt jwt.Provider) {
+func Setup(app *fiber.App, db database.DbAdapter, jwt jwt.Provider, notifs notifications.Manager) {
 	auth.InitSignUp(app, db)
 	auth.InitSignIn(app, db, jwt)
 
