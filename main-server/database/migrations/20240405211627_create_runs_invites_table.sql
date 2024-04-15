@@ -2,8 +2,8 @@
 -- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS runs_invites
 (
-    user_id INT NOT NULL REFERENCES users (id),
-    run_id  INT NOT NULL REFERENCES runs (id)
+    user_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    run_id  INT NOT NULL REFERENCES runs (id) ON DELETE CASCADE
 );
 -- +goose StatementEnd
 

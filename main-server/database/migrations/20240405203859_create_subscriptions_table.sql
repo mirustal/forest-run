@@ -2,8 +2,8 @@
 -- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS subscriptions
 (
-    follower_id INT NOT NULL REFERENCES users (id),
-    followed_id INT NOT NULL REFERENCES users (id),
+    follower_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    followed_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     PRIMARY KEY (follower_id, followed_id)
 );
 -- +goose StatementEnd
