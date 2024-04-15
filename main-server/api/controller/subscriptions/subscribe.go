@@ -26,21 +26,21 @@ func (s subscribe) Handle(ctx *fiber.Ctx) error {
 	}
 
 	authData := middleware.GetAuthData(ctx)
-
-	err := s.db.Subscribe(authData.UserId, request.UserId, ctx.UserContext())
+	subbed, err := s.db.Subscribe(authData.UserId, request.UserId, ctx.UserContext())
 	if err != nil {
 		return ctx.Status(http.StatusInternalServerError).JSON(domain.ErrorResponse{Message: "error while saving subscription to db"})
 	}
 
-	err = s.notifs.Send(domain.Notification{
-		FromUser: authData.UserId,
-		ToUser:   request.UserId,
-		Type:     domain.NewSubscriberNotification,
-	}, nil)
+	if subbed {
+		err = s.notifs.Send(domain.Notification{
+			FromUser: authData.UserId,
+			ToUser:   request.UserId,
+			Type:     domain.NewSubscriberNotification,
+		}, ctx.UserContext())
+	}
 
 	if err != nil {
 		ctx.Context().Logger().Printf("error while sending subscription notification: ", err)
 	}
-
 	return ctx.Status(http.StatusOK).JSON(domain.SubscriptionResponse{})
 }
