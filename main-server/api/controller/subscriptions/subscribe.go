@@ -36,7 +36,7 @@ func (s subscribe) Handle(ctx *fiber.Ctx) error {
 		FromUser: authData.UserId,
 		ToUser:   request.UserId,
 		Type:     domain.NewSubscriberNotification,
-	})
+	}, nil)
 
 	if err != nil {
 		ctx.Context().Logger().Printf("error while sending subscription notification: ", err)

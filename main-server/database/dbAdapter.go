@@ -10,6 +10,7 @@ import (
 type DbAdapter interface {
 	AuthRepo
 	SubscriptionsRepo
+	NotificationsRepo
 }
 
 func NewAdapter(env boot.DBConfig, logger *zap.Logger) (DbAdapter, error) {
