@@ -20,10 +20,10 @@ func NewManager(db database.DbAdapter) Manager {
 
 func (m manager) Send(notification domain.Notification) error {
 	//TODO implement me
-	panic("implement me")
+	return nil
 }
 
 func (m manager) Consume(consumer domain.UserId) ([]domain.Notification, error) {
 	//TODO implement me
-	panic("implement me")
+	return []domain.Notification{}, nil
 }
