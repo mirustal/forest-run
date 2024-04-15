@@ -9,11 +9,7 @@ import (
 
 type DbAdapter interface {
 	AuthRepo
-}
-
-type PgDbAdapter struct {
-	dbPool *pgxpool.Pool
-	logger *zap.Logger
+	SubscriptionsRepo
 }
 
 func NewAdapter(env boot.DBConfig, logger *zap.Logger) (DbAdapter, error) {
@@ -27,4 +23,9 @@ func NewAdapter(env boot.DBConfig, logger *zap.Logger) (DbAdapter, error) {
 		dbPool: dbPool,
 		logger: logger,
 	}, nil
+}
+
+type PgDbAdapter struct {
+	dbPool *pgxpool.Pool
+	logger *zap.Logger
 }

@@ -49,6 +49,13 @@ definitions:
     type: object
   domain.SignUpResponse:
     type: object
+  domain.SubscriptionRequest:
+    properties:
+      userId:
+        type: integer
+    type: object
+  domain.SubscriptionResponse:
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -89,6 +96,74 @@ paths:
       summary: Refresh Tokens
       tags:
       - auth
+  /api/subscribe:
+    post:
+      description: Start receiving notifications of user's actions
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.SubscriptionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.SubscriptionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Subscribe to user
+      tags:
+      - subscriptions
+  /api/unsubscribe:
+    post:
+      description: Stop receiving notifications of user's actions
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.SubscriptionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.SubscriptionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Unsubscribe from user
+      tags:
+      - subscriptions
   /auth/sign-in:
     post:
       description: Log into app and get access tokens
