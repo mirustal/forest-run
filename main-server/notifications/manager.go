@@ -10,6 +10,20 @@ type Manager interface {
 	Consume(consumer domain.UserId) ([]domain.Notification, error)
 }
 
+type manager struct {
+	db database.DbAdapter
+}
+
 func NewManager(db database.DbAdapter) Manager {
-	panic("not implemented")
+	return &manager{db: db}
+}
+
+func (m manager) Send(notification domain.Notification) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m manager) Consume(consumer domain.UserId) ([]domain.Notification, error) {
+	//TODO implement me
+	panic("implement me")
 }

@@ -2,19 +2,12 @@ package subscriptions
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"main-server/api/controller/subscriptions"
 	"main-server/database"
 	"main-server/notifications"
 )
 
-type subscribe struct {
-	notifs notifications.Manager
-	db     database.DbAdapter
-}
-
-func newSubscribe(notifs notifications.Manager, db database.DbAdapter) *subscribe {
-	return &subscribe{notifs: notifs, db: db}
-}
-
-func (s subscribe) Handle(ctx *fiber.Ctx) error {
-
+func InitSubscribe(group fiber.Router, notifs notifications.Manager, db database.DbAdapter) {
+	c := subscriptions.NewSubscribe(notifs, db)
+	group.Post("/subscribe", c.Handle)
 }
