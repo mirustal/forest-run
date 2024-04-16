@@ -1,6 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
-ALTER TABLE runs ADD COLUMN registration_until timestamp;
+ALTER TABLE runs
+    ADD COLUMN registration_until TIMESTAMP NOT NULL;
 -- +goose StatementEnd
 
 -- +goose Down
