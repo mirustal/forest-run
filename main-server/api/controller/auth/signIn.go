@@ -33,7 +33,7 @@ func (s signIn) Handle(ctx *fiber.Ctx) error {
 		return ctx.Status(http.StatusInternalServerError).JSON(domain.ErrorResponse{Message: "error on searching for password"})
 	}
 
-	if Matches(request.Password, user.HashedPassword) == false {
+	if matches(request.Password, user.HashedPassword) == false {
 		return ctx.Status(http.StatusUnauthorized).JSON(domain.ErrorResponse{Code: domain.CodeWrongPassword, Message: "password not matches"})
 	}
 
