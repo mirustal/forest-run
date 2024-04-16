@@ -1,6 +1,13 @@
 package domain
 
+type ErrorCode int
+
+type ErrorResponse struct {
+	Code    ErrorCode `json:"code"`
+	Message string    `json:"message,omitempty"`
+}
+
 const (
-	CodeUserNameAlreadyTaken = 1
-	CodeWrongPassword        = 2
+	CodeUserNameAlreadyTaken ErrorCode = 1
+	CodeWrongPassword        ErrorCode = 2
 )

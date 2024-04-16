@@ -2,14 +2,19 @@ package domain
 
 import "time"
 
+type (
+	NotificationType   int
+	NotificationStatus int
+)
+
 type Notification struct {
 	FromUser  UserId
 	ToUser    UserId
-	Type      int
+	Type      NotificationType
 	CreatedAt time.Time
-	Status    int
+	Status    NotificationStatus
 }
 
 const (
-	NewSubscriberNotification = 1
+	NewSubscriberNotification NotificationType = 1
 )
