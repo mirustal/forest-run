@@ -7,7 +7,7 @@ import (
 
 const maxBcryptPasswordLength = 72
 
-func Hash(p domain.Password) domain.HashedPassword {
+func hash(p domain.Password) domain.HashedPassword {
 	b := []byte(p)
 	if len(b) > maxBcryptPasswordLength {
 		b = b[0 : maxBcryptPasswordLength-1]
@@ -16,7 +16,7 @@ func Hash(p domain.Password) domain.HashedPassword {
 	return domain.HashedPassword(bytes)
 }
 
-func Matches(p domain.Password, hash domain.HashedPassword) bool {
+func matches(p domain.Password, hash domain.HashedPassword) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(p))
 	return err == nil
 }

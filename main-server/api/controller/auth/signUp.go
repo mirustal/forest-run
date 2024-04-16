@@ -29,7 +29,7 @@ func (c signUp) Handle(ctx *fiber.Ctx) error {
 		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: err.Error()})
 	}
 
-	err := c.db.StoreNewUser(request.Username, Hash(request.Password), ctx.UserContext())
+	err := c.db.StoreNewUser(request.Username, hash(request.Password), ctx.UserContext())
 	if err != nil {
 		var usernameAlreadyTakenError database.UsernameAlreadyTakenError
 		if errors.As(err, &usernameAlreadyTakenError) {
