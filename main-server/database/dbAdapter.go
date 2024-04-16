@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/pashagolub/pgxmock/v3"
 	"go.uber.org/zap"
 	"main-server/boot"
 )
@@ -35,4 +36,29 @@ type PgDbAdapter struct {
 type PgxPool interface {
 	Begin(context.Context) (pgx.Tx, error)
 	Close()
+}
+
+type MockDbAdapter struct {
+	PgDbAdapter
+	Mock pgxmock.PgxPoolIface
+}
+
+func NewMockAdapter() (MockDbAdapter, error) {
+	dbPool, err := pgxmock.NewPool()
+	if err != nil {
+		return MockDbAdapter{}, err
+	}
+
+	logger, err := zap.NewDevelopment()
+	if err != nil {
+		return MockDbAdapter{}, err
+	}
+
+	return MockDbAdapter{
+		PgDbAdapter: PgDbAdapter{
+			dbPool: dbPool,
+			logger: logger,
+		},
+		mock: dbPool,
+	}, nil
 }
