@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
 	"main-server/boot"
@@ -27,6 +28,11 @@ func NewAdapter(env boot.DBConfig, logger *zap.Logger) (DbAdapter, error) {
 }
 
 type PgDbAdapter struct {
-	dbPool *pgxpool.Pool
+	dbPool PgxPool
 	logger *zap.Logger
+}
+
+type PgxPool interface {
+	Begin(context.Context) (pgx.Tx, error)
+	Close()
 }
