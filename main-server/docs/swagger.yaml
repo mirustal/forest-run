@@ -1,9 +1,49 @@
 basePath: /
 definitions:
+  domain.CreateRunRequest:
+    properties:
+      avatar_url:
+        type: string
+      description:
+        type: string
+      max_participants:
+        type: integer
+      name:
+        type: string
+      official_site_url:
+        type: string
+      participation_format:
+        $ref: '#/definitions/domain.RunParticipationFormat'
+      permissions:
+        $ref: '#/definitions/domain.RunPermissionsType'
+      registration_until:
+        type: string
+      route:
+        $ref: '#/definitions/domain.Route'
+      start_place:
+        $ref: '#/definitions/domain.Place'
+      start_time:
+        type: string
+      transaction_id:
+        type: string
+    type: object
+  domain.CreateRunResponse:
+    properties:
+      run:
+        $ref: '#/definitions/domain.Run'
+    type: object
+  domain.ErrorCode:
+    enum:
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - CodeUserNameAlreadyTaken
+    - CodeWrongPassword
   domain.ErrorResponse:
     properties:
       code:
-        type: integer
+        $ref: '#/definitions/domain.ErrorCode'
       message:
         type: string
     type: object
@@ -13,6 +53,20 @@ definitions:
         type: string
       token:
         type: string
+    type: object
+  domain.Place:
+    properties:
+      address:
+        type: string
+      point:
+        $ref: '#/definitions/domain.Point'
+    type: object
+  domain.Point:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
     type: object
   domain.RefreshTokensRequest:
     properties:
@@ -26,6 +80,70 @@ definitions:
       refreshToken:
         type: string
     type: object
+  domain.Route:
+    properties:
+      points:
+        items:
+          $ref: '#/definitions/domain.Point'
+        type: array
+    type: object
+  domain.Run:
+    properties:
+      avatar_url:
+        type: string
+      creator:
+        type: integer
+      description:
+        type: string
+      id:
+        type: integer
+      max_participants:
+        type: integer
+      name:
+        type: string
+      official_site_url:
+        type: string
+      participation_format:
+        $ref: '#/definitions/domain.RunParticipationFormat'
+      permissions:
+        $ref: '#/definitions/domain.RunPermissionsType'
+      registration_until:
+        type: string
+      route:
+        $ref: '#/definitions/domain.Route'
+      start_place:
+        $ref: '#/definitions/domain.Place'
+      start_time:
+        type: string
+      status:
+        $ref: '#/definitions/domain.RunStatus'
+    type: object
+  domain.RunParticipationFormat:
+    enum:
+    - 0
+    - 1
+    type: integer
+    x-enum-varnames:
+    - OpenRunFormat
+    - ClosedRunFormat
+  domain.RunPermissionsType:
+    enum:
+    - 0
+    type: integer
+    x-enum-varnames:
+    - FreeRunPermissionsType
+  domain.RunStatus:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 4
+    type: integer
+    x-enum-varnames:
+    - OpenRunStatus
+    - RunningRunStatus
+    - FinishedRunStatus
+    - CanceledRunStatus
   domain.SignInRequest:
     properties:
       password:
@@ -96,6 +214,40 @@ paths:
       summary: Refresh Tokens
       tags:
       - auth
+  /api/runs/create:
+    post:
+      description: Create run
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.CreateRunRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.CreateRunResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create run
+      tags:
+      - runs
   /api/subscribe:
     post:
       description: Start receiving notifications of user's actions

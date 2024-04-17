@@ -69,6 +69,60 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/runs/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create run",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "runs"
+                ],
+                "summary": "Create run",
+                "parameters": [
+                    {
+                        "description": "input",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.CreateRunRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.CreateRunResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/subscribe": {
             "post": {
                 "security": [
@@ -277,11 +331,71 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "domain.CreateRunRequest": {
+            "type": "object",
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "max_participants": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "official_site_url": {
+                    "type": "string"
+                },
+                "participation_format": {
+                    "$ref": "#/definitions/domain.RunParticipationFormat"
+                },
+                "permissions": {
+                    "$ref": "#/definitions/domain.RunPermissionsType"
+                },
+                "registration_until": {
+                    "type": "string"
+                },
+                "route": {
+                    "$ref": "#/definitions/domain.Route"
+                },
+                "start_place": {
+                    "$ref": "#/definitions/domain.Place"
+                },
+                "start_time": {
+                    "type": "string"
+                },
+                "transaction_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.CreateRunResponse": {
+            "type": "object",
+            "properties": {
+                "run": {
+                    "$ref": "#/definitions/domain.Run"
+                }
+            }
+        },
+        "domain.ErrorCode": {
+            "type": "integer",
+            "enum": [
+                1,
+                2
+            ],
+            "x-enum-varnames": [
+                "CodeUserNameAlreadyTaken",
+                "CodeWrongPassword"
+            ]
+        },
         "domain.ErrorResponse": {
             "type": "object",
             "properties": {
                 "code": {
-                    "type": "integer"
+                    "$ref": "#/definitions/domain.ErrorCode"
                 },
                 "message": {
                     "type": "string"
@@ -296,6 +410,28 @@ const docTemplate = `{
                 },
                 "token": {
                     "type": "string"
+                }
+            }
+        },
+        "domain.Place": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "point": {
+                    "$ref": "#/definitions/domain.Point"
+                }
+            }
+        },
+        "domain.Point": {
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
                 }
             }
         },
@@ -317,6 +453,99 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "domain.Route": {
+            "type": "object",
+            "properties": {
+                "points": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Point"
+                    }
+                }
+            }
+        },
+        "domain.Run": {
+            "type": "object",
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "creator": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "max_participants": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "official_site_url": {
+                    "type": "string"
+                },
+                "participation_format": {
+                    "$ref": "#/definitions/domain.RunParticipationFormat"
+                },
+                "permissions": {
+                    "$ref": "#/definitions/domain.RunPermissionsType"
+                },
+                "registration_until": {
+                    "type": "string"
+                },
+                "route": {
+                    "$ref": "#/definitions/domain.Route"
+                },
+                "start_place": {
+                    "$ref": "#/definitions/domain.Place"
+                },
+                "start_time": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/domain.RunStatus"
+                }
+            }
+        },
+        "domain.RunParticipationFormat": {
+            "type": "integer",
+            "enum": [
+                0,
+                1
+            ],
+            "x-enum-varnames": [
+                "OpenRunFormat",
+                "ClosedRunFormat"
+            ]
+        },
+        "domain.RunPermissionsType": {
+            "type": "integer",
+            "enum": [
+                0
+            ],
+            "x-enum-varnames": [
+                "FreeRunPermissionsType"
+            ]
+        },
+        "domain.RunStatus": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2,
+                4
+            ],
+            "x-enum-varnames": [
+                "OpenRunStatus",
+                "RunningRunStatus",
+                "FinishedRunStatus",
+                "CanceledRunStatus"
+            ]
         },
         "domain.SignInRequest": {
             "type": "object",
