@@ -1,28 +1,19 @@
 package boot
 
 import (
+	"encoding/json"
 	"main-server/defs"
-	"main-server/domain"
+	"os"
 )
 
 func LoadDefs(env Env) (defs.Defs, error) {
-	// todo: move to json file, better to cdn
-	return defs.Defs{
-		RunPermissionsDefs: defs.RunPermissionsDefs{
-			Types: map[domain.RunPermissionsType]defs.RunPermissionsDef{
-				domain.RunPermissionsType(0): {
-					MaxOnlineParticipants: 10,
-					IsPhotoAllowed:        false,
-					IsStoriesAllowed:      false,
-					IsStreamingAllowed:    false,
-				},
-				domain.RunPermissionsType(10): {
-					MaxOnlineParticipants: -1,
-					IsPhotoAllowed:        true,
-					IsStoriesAllowed:      true,
-					IsStreamingAllowed:    true,
-				},
-			},
-		},
-	}, nil
+	bytes, err := os.ReadFile(env.DefsPath)
+	if err != nil {
+		return defs.Defs{}, err
+	}
+
+	var d defs.Defs
+	err = json.Unmarshal(bytes, &d)
+
+	return d, err
 }

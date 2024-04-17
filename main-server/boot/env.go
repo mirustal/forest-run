@@ -16,6 +16,7 @@ const (
 type Env struct {
 	AppEnv        string `yaml:"appEnv"`
 	ServerAddress string `yaml:"serverAddress"`
+	DefsPath      string `yaml:"defsPath"` // replace with url to cdn
 	LoggerConfig  `yaml:"loggerConfig"`
 	JWTConfig     `yaml:"JWTConfig"`
 	DBConfig      `yaml:"DBConfig"`

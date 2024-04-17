@@ -1,0 +1,15 @@
+{
+	"run_permissions_defs": {
+		"types": {
+			"0": {
+				"max_online_participants": 10
+			},
+			"10": {
+				"max_online_participants": -1,
+				"is_photo_allowed": true,
+				"is_stories_allowed": true,
+				"is_streaming_allowed": true
+			}
+		}
+	}
+}
