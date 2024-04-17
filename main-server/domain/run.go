@@ -12,6 +12,7 @@ type (
 	Run   struct {
 		Id                    RunId                  `json:"id,omitempty"`
 		Name                  string                 `json:"name,omitempty"`
+		Description           string                 `json:"description,omitempty"`
 		OfficialSiteUrl       string                 `json:"official_site_url,omitempty"`
 		AvatarUrl             string                 `json:"avatar_url,omitempty"`
 		Route                 Route                  `json:"route"`
