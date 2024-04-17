@@ -60,6 +60,6 @@ func NewMockAdapter() (MockDbAdapter, error) {
 			dbPool: dbPool,
 			logger: logger,
 		},
-		mock: dbPool,
+		Mock: dbPool,
 	}, nil
 }
