@@ -13,6 +13,7 @@ type DbAdapter interface {
 	AuthRepo
 	SubscriptionsRepo
 	NotificationsRepo
+	RunsRepo
 }
 
 func NewAdapter(env boot.DBConfig, logger *zap.Logger) (DbAdapter, error) {

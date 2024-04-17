@@ -13,6 +13,7 @@ import (
 	_ "main-server/docs"
 	"main-server/jwt"
 	"main-server/notifications"
+	"main-server/purchasing"
 )
 
 //	@title		Forest Run API
@@ -36,6 +37,11 @@ func main() {
 
 	logger.Sugar().Info("loaded env: ", env)
 
+	defs, err := boot.LoadDefs(env)
+	if err != nil {
+		logger.Fatal("Error on loading defs: ", zap.Error(err))
+	}
+
 	jwtProvider := jwt.NewProvider(env.JWTConfig)
 
 	app := fiber.New()
@@ -48,13 +54,14 @@ func main() {
 	}
 
 	notifs := notifications.NewManager(db)
+	purchasingManager := purchasing.NewManager()
 
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 	}))
 
-	route.Setup(app, db, jwtProvider, notifs)
+	route.Setup(app, db, jwtProvider, notifs, defs, purchasingManager)
 
 	if env.AppEnv == boot.DevEnv {
 		app.Get("/swagger/*", swagger.HandlerDefault)
