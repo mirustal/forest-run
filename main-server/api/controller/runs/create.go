@@ -42,7 +42,7 @@ func (c create) Handle(ctx *fiber.Ctx) error {
 		request.RunPermissions = domain.FreeRunPermissionsType
 	}
 
-	def, ok := c.defs.RunPermissionsDefs.Types[request.RunPermissions]
+	_, ok := c.defs.RunPermissionsDefs.Types[request.RunPermissions]
 	if !ok {
 		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "invalid run permissions"})
 	}
@@ -60,7 +60,7 @@ func (c create) Handle(ctx *fiber.Ctx) error {
 		Route:               request.Route,
 		StartTime:           request.StartTime,
 		StartPlace:          request.StartPlace,
-		MaxParticipants:     min(def.MaxOnlineParticipants, request.MaxParticipants),
+		MaxParticipants:     request.MaxParticipants,
 		RunPermissions:      request.RunPermissions,
 		Status:              domain.OpenRunStatus,
 		ParticipationFormat: request.ParticipationFormat,
