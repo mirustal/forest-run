@@ -9,6 +9,7 @@ type SubscriptionsRepo interface {
 	Subscribe(subscriber domain.UserId, receiver domain.UserId, ctx context.Context) (bool, error)
 	Unsubscribe(subscriber domain.UserId, receiver domain.UserId, ctx context.Context) error
 	GetSubscriptions(subscriber domain.UserId, ctx context.Context) ([]domain.UserId, error)
+	GetSubscribers(user domain.UserId, ctx context.Context) ([]domain.UserId, error)
 }
 
 func (p PgDbAdapter) Subscribe(subscriber domain.UserId, receiver domain.UserId, ctx context.Context) (subscribed bool, err error) {

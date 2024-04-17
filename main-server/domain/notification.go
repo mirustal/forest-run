@@ -17,4 +17,5 @@ type Notification struct {
 
 const (
 	NewSubscriberNotification NotificationType = 1
+	NewRunCreatedNotification NotificationType = 2
 )

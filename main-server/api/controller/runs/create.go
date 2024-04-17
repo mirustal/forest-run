@@ -77,5 +77,10 @@ func (c create) Handle(ctx *fiber.Ctx) error {
 		return ctx.Status(http.StatusInternalServerError).JSON(domain.ErrorResponse{Message: "can't store run"})
 	}
 
+	err = c.notifs.SendToSubscribers(authData.UserId, domain.Notification{
+		Type:      domain.NewRunCreatedNotification,
+		CreatedAt: time.Now(),
+	}, ctx.UserContext())
+
 	return ctx.Status(http.StatusOK).JSON(domain.CreateRunResponse{Run: run})
 }

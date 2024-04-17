@@ -8,6 +8,7 @@ import (
 type NotificationsRepo interface {
 	Store(notification domain.Notification, ctx context.Context) error
 	GetNotifications(userId domain.UserId, ctx context.Context) ([]domain.Notification, error)
+	StoreMany(notifications []domain.Notification, ctx context.Context) error
 }
 
 func (p PgDbAdapter) Store(notification domain.Notification, ctx context.Context) error {

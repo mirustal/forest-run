@@ -8,6 +8,7 @@ import (
 
 type Manager interface {
 	Send(notification domain.Notification, ctx context.Context) error
+	SendToSubscribers(sender domain.UserId, notification domain.Notification, ctx context.Context) error
 	Consume(consumer domain.UserId, ctx context.Context) ([]domain.Notification, error)
 }
 
@@ -21,6 +22,11 @@ func NewManager(db database.DbAdapter) Manager {
 
 func (m manager) Send(notification domain.Notification, ctx context.Context) error {
 	return m.db.Store(notification, ctx)
+}
+
+func (m manager) SendToSubscribers(sender domain.UserId, notification domain.Notification, ctx context.Context) error {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (m manager) Consume(consumer domain.UserId, ctx context.Context) ([]domain.Notification, error) {
