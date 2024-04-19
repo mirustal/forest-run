@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"github.com/jackc/pgx/v5"
 	"main-server/domain"
 )
 
@@ -42,4 +43,23 @@ func (p PgDbAdapter) GetNotifications(userId domain.UserId, ctx context.Context)
 	}
 
 	return notifications, t.Commit(ctx)
+}
+
+func (p PgDbAdapter) StoreMany(notifications []domain.Notification, ctx context.Context) error {
+	t, err := p.dbPool.Begin(ctx)
+	if err != nil {
+		t.Rollback(ctx)
+		return err
+	}
+
+	_, err = t.CopyFrom(ctx, pgx.Identifier{"notifications"}, []string{"from_user_id", "to_user_id", "type"}, pgx.CopyFromSlice(len(notifications), func(i int) ([]any, error) {
+		return []any{notifications[i].FromUser, notifications[i].ToUser, notifications[i].Type}, nil
+	}))
+
+	if err != nil {
+		t.Rollback(ctx)
+		return err
+	}
+
+	return t.Commit(ctx)
 }

@@ -44,7 +44,26 @@ func (p PgDbAdapter) Unsubscribe(subscriber domain.UserId, receiver domain.UserI
 	return t.Commit(ctx)
 }
 
-func (p PgDbAdapter) GetSubscriptions(subscriber domain.UserId, ctx context.Context) ([]domain.UserId, error) {
-	// todo
-	return []domain.UserId{}, nil
+func (p PgDbAdapter) GetSubscriptions(subscriber domain.UserId, ctx context.Context) (subscriptions []domain.UserId, err error) {
+	t, err := p.dbPool.Begin(ctx)
+	if err != nil {
+		t.Rollback(ctx)
+		return subscriptions, err
+	}
+
+	err = t.QueryRow(ctx, "SELECT followed_id FROM subscriptions WHERE follower_id = $1", subscriber).Scan(&subscriptions)
+
+	return subscriptions, t.Commit(ctx)
+}
+
+func (p PgDbAdapter) GetSubscribers(user domain.UserId, ctx context.Context) (subscribers []domain.UserId, err error) {
+	t, err := p.dbPool.Begin(ctx)
+	if err != nil {
+		t.Rollback(ctx)
+		return subscribers, err
+	}
+
+	err = t.QueryRow(ctx, "SELECT follower_id FROM subscriptions WHERE followed_id = $1", user).Scan(&subscribers)
+
+	return subscribers, t.Commit(ctx)
 }
