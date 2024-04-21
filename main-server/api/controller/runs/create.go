@@ -82,5 +82,9 @@ func (c create) Handle(ctx *fiber.Ctx) error {
 		CreatedAt: time.Now(),
 	}, ctx.UserContext())
 
+	if err != nil {
+		ctx.Context().Logger().Printf("error while sending run created notification: ", err)
+	}
+
 	return ctx.Status(http.StatusOK).JSON(domain.CreateRunResponse{Run: run})
 }

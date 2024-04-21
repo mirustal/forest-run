@@ -25,8 +25,21 @@ func (m manager) Send(notification domain.Notification, ctx context.Context) err
 }
 
 func (m manager) SendToSubscribers(sender domain.UserId, notification domain.Notification, ctx context.Context) error {
-	//TODO implement me
-	panic("implement me")
+	subs, err := m.db.GetSubscribers(sender, ctx)
+	if err != nil {
+		return err
+	}
+
+	notifs := make([]domain.Notification, 0, len(subs))
+	for _, sub := range subs {
+		notifs = append(notifs, domain.Notification{
+			FromUser: sender,
+			ToUser:   sub,
+			Type:     notification.Type,
+		})
+	}
+
+	return m.db.StoreMany(notifs, ctx)
 }
 
 func (m manager) Consume(consumer domain.UserId, ctx context.Context) ([]domain.Notification, error) {
