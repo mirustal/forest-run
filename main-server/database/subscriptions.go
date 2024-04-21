@@ -46,24 +46,76 @@ func (p PgDbAdapter) Unsubscribe(subscriber domain.UserId, receiver domain.UserI
 
 func (p PgDbAdapter) GetSubscriptions(subscriber domain.UserId, ctx context.Context) (subscriptions []domain.UserId, err error) {
 	t, err := p.dbPool.Begin(ctx)
+	defer func() {
+		if err != nil {
+			_ = t.Rollback(ctx)
+		}
+	}()
+
 	if err != nil {
-		t.Rollback(ctx)
 		return subscriptions, err
 	}
 
-	err = t.QueryRow(ctx, "SELECT followed_id FROM subscriptions WHERE follower_id = $1", subscriber).Scan(&subscriptions)
+	r, err := t.Query(ctx, "SELECT followed_id FROM subscriptions WHERE follower_id = $1", subscriber)
+
+	if err != nil {
+		return subscriptions, err
+	}
+
+	subscriptions = make([]domain.UserId, 0)
+	for r.Next() {
+		if err = r.Err(); err != nil {
+			return subscriptions, err
+		}
+		var sub domain.UserId
+		err = r.Scan(&sub)
+		if err != nil {
+			return subscriptions, err
+		}
+		subscriptions = append(subscriptions, sub)
+	}
+
+	if err != nil {
+		return subscriptions, err
+	}
 
 	return subscriptions, t.Commit(ctx)
 }
 
 func (p PgDbAdapter) GetSubscribers(user domain.UserId, ctx context.Context) (subscribers []domain.UserId, err error) {
 	t, err := p.dbPool.Begin(ctx)
+	defer func() {
+		if err != nil {
+			_ = t.Rollback(ctx)
+		}
+	}()
+
 	if err != nil {
-		t.Rollback(ctx)
 		return subscribers, err
 	}
 
-	err = t.QueryRow(ctx, "SELECT follower_id FROM subscriptions WHERE followed_id = $1", user).Scan(&subscribers)
+	r, err := t.Query(ctx, "SELECT follower_id FROM subscriptions WHERE followed_id = $1", user)
+
+	if err != nil {
+		return subscribers, err
+	}
+
+	subscribers = make([]domain.UserId, 0)
+	for r.Next() {
+		if err = r.Err(); err != nil {
+			return subscribers, err
+		}
+		var sub domain.UserId
+		err = r.Scan(&sub)
+		if err != nil {
+			return subscribers, err
+		}
+		subscribers = append(subscribers, sub)
+	}
+
+	if err != nil {
+		return subscribers, err
+	}
 
 	return subscribers, t.Commit(ctx)
 }
