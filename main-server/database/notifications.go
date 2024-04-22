@@ -19,7 +19,7 @@ func (p PgDbAdapter) Store(notification domain.Notification, ctx context.Context
 		return err
 	}
 
-	_, err = t.Exec(ctx, "INSERT INTO notifications (from_user_id, to_user_id, type) VALUES ($1, $2, $3)", notification.FromUser, notification.ToUser, notification.Type)
+	_, err = t.Exec(ctx, "INSERT INTO notifications (from_user_id, to_user_id, type, body) VALUES ($1, $2, $3, $4)", notification.FromUser, notification.ToUser, notification.Type, notification.Body)
 	if err != nil {
 		t.Rollback(ctx)
 		return err
@@ -52,8 +52,8 @@ func (p PgDbAdapter) StoreMany(notifications []domain.Notification, ctx context.
 		return err
 	}
 
-	_, err = t.CopyFrom(ctx, pgx.Identifier{"notifications"}, []string{"from_user_id", "to_user_id", "type"}, pgx.CopyFromSlice(len(notifications), func(i int) ([]any, error) {
-		return []any{notifications[i].FromUser, notifications[i].ToUser, notifications[i].Type}, nil
+	_, err = t.CopyFrom(ctx, pgx.Identifier{"notifications"}, []string{"from_user_id", "to_user_id", "type", "body"}, pgx.CopyFromSlice(len(notifications), func(i int) ([]any, error) {
+		return []any{notifications[i].FromUser, notifications[i].ToUser, notifications[i].Type, notifications[i].Body}, nil
 	}))
 
 	if err != nil {

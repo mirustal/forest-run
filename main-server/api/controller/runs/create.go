@@ -77,13 +77,18 @@ func (c create) Handle(ctx *fiber.Ctx) error {
 		return ctx.Status(http.StatusInternalServerError).JSON(domain.ErrorResponse{Message: "can't store run"})
 	}
 
-	err = c.notifs.SendToSubscribers(authData.UserId, domain.Notification{
+	notif, err := domain.Notification{
 		Type:      domain.NewRunCreatedNotification,
 		CreatedAt: time.Now(),
-	}, ctx.UserContext())
+	}.WithBody(domain.RunCreatedNotificationBody{RunId: run.Id})
 
 	if err != nil {
-		ctx.Context().Logger().Printf("error while sending run created notification: ", err)
+		ctx.Context().Logger().Printf("can't create notification body: ", err)
+	} else {
+		err = c.notifs.SendToSubscribers(authData.UserId, notif, ctx.UserContext())
+		if err != nil {
+			ctx.Context().Logger().Printf("error while sending run created notification: ", err)
+		}
 	}
 
 	return ctx.Status(http.StatusOK).JSON(domain.CreateRunResponse{Run: run})

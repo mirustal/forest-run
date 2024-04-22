@@ -32,15 +32,21 @@ func (s subscribe) Handle(ctx *fiber.Ctx) error {
 	}
 
 	if subbed {
-		err = s.notifs.Send(domain.Notification{
+		notif, err := domain.Notification{
 			FromUser: authData.UserId,
 			ToUser:   request.UserId,
 			Type:     domain.NewSubscriberNotification,
-		}, ctx.UserContext())
+		}.WithBody(domain.EmptyNotificationBody{})
+
+		if err != nil {
+			ctx.Context().Logger().Printf("error while sending subscription notification: ", err)
+		} else {
+			err = s.notifs.Send(notif, ctx.UserContext())
+			if err != nil {
+				ctx.Context().Logger().Printf("error while sending subscription notification: ", err)
+			}
+		}
 	}
 
-	if err != nil {
-		ctx.Context().Logger().Printf("error while sending subscription notification: ", err)
-	}
 	return ctx.Status(http.StatusOK).JSON(domain.SubscriptionResponse{})
 }
