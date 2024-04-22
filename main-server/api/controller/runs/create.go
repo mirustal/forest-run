@@ -33,8 +33,7 @@ func (c create) Handle(ctx *fiber.Ctx) error {
 	authData := middleware.GetAuthData(ctx)
 
 	if request.PermissionsTransactionId != nil {
-		perm, err := c.purchases.ValidateRunPermissionsTransaction(*request.PermissionsTransactionId)
-		request.RunPermissions = perm
+		err := c.purchases.ValidateRunPermissionsTransaction(*request.PermissionsTransactionId, request.RunPermissions, ctx.UserContext())
 		if err != nil {
 			return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "invalid permissions transaction"})
 		}

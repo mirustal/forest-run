@@ -176,6 +176,40 @@ definitions:
     type: object
   domain.SubscriptionResponse:
     type: object
+  domain.UpdateRunRequest:
+    properties:
+      avatar_url:
+        type: string
+      description:
+        type: string
+      max_participants:
+        type: integer
+      name:
+        type: string
+      official_site_url:
+        type: string
+      participation_format:
+        $ref: '#/definitions/domain.RunParticipationFormat'
+      permissions:
+        $ref: '#/definitions/domain.RunPermissionsType'
+      registration_until:
+        type: string
+      route:
+        $ref: '#/definitions/domain.Route'
+      run_id:
+        type: integer
+      start_place:
+        $ref: '#/definitions/domain.Place'
+      start_time:
+        type: string
+      transaction_id:
+        type: string
+    type: object
+  domain.UpdateRunResponse:
+    properties:
+      run:
+        $ref: '#/definitions/domain.Run'
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -214,6 +248,44 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Create run
+      tags:
+      - runs
+  /api/runs/update:
+    post:
+      description: Update run
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UpdateRunRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.UpdateRunResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update run
       tags:
       - runs
   /api/subscribe:

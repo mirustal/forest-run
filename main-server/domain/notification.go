@@ -30,11 +30,12 @@ func (n Notification) WithBody(b any) (Notification, error) {
 }
 
 const (
-	NewSubscriberNotification        NotificationType = 1
-	NewRunCreatedNotification        NotificationType = 2
-	RunChangedStartTimeNotification  NotificationType = 3
-	RunChangedStartPlaceNotification NotificationType = 4
-	RunChangedStatusNotification     NotificationType = 5
+	NewSubscriberNotification                 NotificationType = 1
+	NewRunCreatedNotification                 NotificationType = 2
+	RunChangedStartTimeNotification           NotificationType = 3
+	RunChangedStartPlaceNotification          NotificationType = 4
+	RunChangedStatusNotification              NotificationType = 5
+	RunChangedRegistrationEndTimeNotification NotificationType = 6
 )
 
 type RunCreatedNotificationBody struct {
@@ -56,6 +57,12 @@ type RunChangedStartPlaceNotificationBody struct {
 type RunChangedStatusNotificationBody struct {
 	RunId RunId `json:"runId"`
 	New   Run   `json:"new"`
+}
+
+type RunChangedRegistrationEndTimeNotificationBody struct {
+	RunId RunId     `json:"runId"`
+	Old   time.Time `json:"old"`
+	New   time.Time `json:"new"`
 }
 
 type EmptyNotificationBody struct {

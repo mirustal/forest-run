@@ -69,6 +69,66 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/runs/update": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update run",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "runs"
+                ],
+                "summary": "Update run",
+                "parameters": [
+                    {
+                        "description": "input",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.UpdateRunRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.UpdateRunResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ErrorResponse"
+                        }
+                    },
+                    "405": {
+                        "description": "Method Not Allowed",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/subscribe": {
             "post": {
                 "security": [
@@ -596,6 +656,58 @@ const docTemplate = `{
         },
         "domain.SubscriptionResponse": {
             "type": "object"
+        },
+        "domain.UpdateRunRequest": {
+            "type": "object",
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "max_participants": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "official_site_url": {
+                    "type": "string"
+                },
+                "participation_format": {
+                    "$ref": "#/definitions/domain.RunParticipationFormat"
+                },
+                "permissions": {
+                    "$ref": "#/definitions/domain.RunPermissionsType"
+                },
+                "registration_until": {
+                    "type": "string"
+                },
+                "route": {
+                    "$ref": "#/definitions/domain.Route"
+                },
+                "run_id": {
+                    "type": "integer"
+                },
+                "start_place": {
+                    "$ref": "#/definitions/domain.Place"
+                },
+                "start_time": {
+                    "type": "string"
+                },
+                "transaction_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.UpdateRunResponse": {
+            "type": "object",
+            "properties": {
+                "run": {
+                    "$ref": "#/definitions/domain.Run"
+                }
+            }
         }
     },
     "securityDefinitions": {

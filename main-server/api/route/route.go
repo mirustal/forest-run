@@ -25,4 +25,5 @@ func Setup(app *fiber.App, db database.DbAdapter, jwt jwt.Provider, notifs notif
 	subscriptions.InitUnsubscribe(protectedRouter, db)
 
 	runs.InitCreate(protectedRouter, db, notifs, defs, purchases)
+	runs.InitUpdate(protectedRouter, db, notifs, defs, purchases)
 }
