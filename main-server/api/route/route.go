@@ -26,4 +26,5 @@ func Setup(app *fiber.App, db database.DbAdapter, jwt jwt.Provider, notifs notif
 
 	runs.InitCreate(protectedRouter, db, notifs, defs, purchases)
 	runs.InitUpdate(protectedRouter, db, notifs, defs, purchases)
+	runs.InitInvite(protectedRouter, db, notifs)
 }

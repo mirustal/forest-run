@@ -42,3 +42,12 @@ type (
 		Run Run `json:"run"`
 	}
 )
+
+type (
+	InviteRunRequest struct {
+		RunId RunId    `json:"run_id"`
+		Users []UserId `json:"users"`
+	}
+	InviteRunResponse struct {
+	}
+)
