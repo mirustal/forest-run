@@ -70,6 +70,8 @@ definitions:
     type: object
   domain.RefreshTokensRequest:
     properties:
+      authToken:
+        type: string
       refreshToken:
         type: string
     type: object
@@ -180,40 +182,6 @@ info:
   title: Forest Run API
   version: 0.0.1
 paths:
-  /api/refresh:
-    post:
-      description: Refresh JWT Tokens pair
-      parameters:
-      - description: Refresh tokens data
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/domain.RefreshTokensRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/domain.RefreshTokensResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/domain.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/domain.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/domain.ErrorResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Refresh Tokens
-      tags:
-      - auth
   /api/runs/create:
     post:
       description: Create run
@@ -316,6 +284,40 @@ paths:
       summary: Unsubscribe from user
       tags:
       - subscriptions
+  /auth/refresh:
+    post:
+      description: Refresh JWT Tokens pair
+      parameters:
+      - description: Refresh tokens data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.RefreshTokensRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.RefreshTokensResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Refresh Tokens
+      tags:
+      - auth
   /auth/sign-in:
     post:
       description: Log into app and get access tokens

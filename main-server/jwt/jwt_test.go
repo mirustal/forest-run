@@ -52,4 +52,8 @@ func TestExpiredJWTToken(t *testing.T) {
 
 	_, err = provider.Parse(token.Token)
 	assert.Error(t, err)
+
+	body, err := provider.ParseUnverified(token.Token)
+	assert.Nil(t, err)
+	assert.Equal(t, domain.UserId(1), body.UserId)
 }

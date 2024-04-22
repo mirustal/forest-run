@@ -14,6 +14,7 @@ type Provider interface {
 	CreateToken(body domain.JWTBody) (domain.JWTTokenData, error)
 	CreateRefreshToken() (domain.RefreshTokenData, error)
 	Parse(token domain.JWTToken) (domain.JWTBody, error)
+	ParseUnverified(token domain.JWTToken) (body domain.JWTBody, err error)
 }
 
 func NewProvider(cfg boot.JWTConfig) Provider {
@@ -63,6 +64,22 @@ func (j jwtProvider) Parse(token domain.JWTToken) (body domain.JWTBody, err erro
 
 	if t.Valid == false {
 		return body, errors.New("jwt token invalid")
+	}
+
+	if claims, ok := t.Claims.(*jwtClaims); ok {
+		return claims.JWTBody, nil
+	}
+
+	return body, errors.New("unable to parse jwt claims")
+}
+
+func (j jwtProvider) ParseUnverified(token domain.JWTToken) (body domain.JWTBody, err error) {
+	t, _ := jwt.ParseWithClaims(string(token), &jwtClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(j.SecureKey), nil
+	}, jwt.WithoutClaimsValidation())
+
+	if t == nil {
+		return body, errors.New("unable to parse jwt token")
 	}
 
 	if claims, ok := t.Claims.(*jwtClaims); ok {

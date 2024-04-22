@@ -25,6 +25,7 @@ type (
 
 type (
 	RefreshTokensRequest struct {
+		AuthToken    JWTToken     `json:"authToken"`
 		RefreshToken RefreshToken `json:"refreshToken"`
 	}
 	RefreshTokensResponse struct {

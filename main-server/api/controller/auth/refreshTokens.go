@@ -3,7 +3,6 @@ package auth
 import (
 	"github.com/gofiber/fiber/v2"
 	"main-server/api/controller"
-	"main-server/api/middleware"
 	"main-server/database"
 	"main-server/domain"
 	"main-server/jwt"
@@ -26,7 +25,10 @@ func (c refreshTokens) Handle(ctx *fiber.Ctx) error {
 		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "can't parse request json"})
 	}
 
-	authData := middleware.GetAuthData(ctx)
+	authData, err := c.jwt.ParseUnverified(request.AuthToken)
+	if err != nil {
+		return ctx.Status(http.StatusUnauthorized).JSON(domain.ErrorResponse{Message: "wrong auth token"})
+	}
 
 	activeToken, err := c.db.GetUserRefreshToken(authData.UserId, ctx.UserContext())
 	if err != nil {

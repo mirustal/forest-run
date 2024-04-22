@@ -17,7 +17,7 @@ import (
 // @Failure		400,409	{object}	domain.ErrorResponse
 // @Failure		500		{object}	domain.ErrorResponse
 // @Router			/auth/sign-up [post]
-func InitSignUp(app *fiber.App, db database.DbAdapter) {
+func InitSignUp(app fiber.Router, db database.DbAdapter) {
 	c := auth.NewSignUp(db)
 	app.Post("/auth/sign-up", c.Handle)
 }

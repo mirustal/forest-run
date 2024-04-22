@@ -17,8 +17,8 @@ import (
 // @Success		200		{object}	domain.RefreshTokensResponse
 // @Failure		400,401	{object}	domain.ErrorResponse
 // @Failure		500		{object}	domain.ErrorResponse
-// @Router			/api/refresh [post]
+// @Router			/auth/refresh [post]
 func InitRefreshTokens(group fiber.Router, jwt jwt.Provider, db database.DbAdapter) {
 	c := auth.NewRefreshTokens(db, jwt)
-	group.Post("/refresh", c.Handle)
+	group.Post("/auth/refresh", c.Handle)
 }
