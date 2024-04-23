@@ -3,4 +3,5 @@ go 1.21.2
 use (
 	common
 	main-server
+	realtime-runs-server
 )

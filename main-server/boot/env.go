@@ -2,24 +2,18 @@ package boot
 
 import (
 	"errors"
+	"forest-run/common/configs"
 	"log"
 	"time"
 
 	"github.com/spf13/viper"
 )
 
-const (
-	DevEnv  = "dev"
-	ProdEnv = "prod"
-)
-
 type Env struct {
-	AppEnv        string `yaml:"appEnv"`
-	ServerAddress string `yaml:"serverAddress"`
-	DefsPath      string `yaml:"defsPath"` // replace with url to cdn
-	LoggerConfig  `yaml:"loggerConfig"`
-	JWTConfig     `yaml:"JWTConfig"`
-	DBConfig      `yaml:"DBConfig"`
+	configs.CommonConfig `yaml:"commonConfig"`
+	configs.LoggerConfig `yaml:"loggerConfig"`
+	JWTConfig            `yaml:"JWTConfig"`
+	DBConfig             `yaml:"DBConfig"`
 }
 
 func (e Env) validate() error {
@@ -27,35 +21,8 @@ func (e Env) validate() error {
 		return err
 	}
 
-	if err := e.LoggerConfig.validate(); err != nil {
+	if err := e.LoggerConfig.Validate(); err != nil {
 		return err
-	}
-
-	return nil
-}
-
-type LoggerConfig struct {
-	LogSaveFile       string `yaml:"logSaveFile"`
-	MaxLogFileSize    int    `yaml:"maxLogFileSize"`
-	MaxLogFileBackups int    `yaml:"maxLogFileBackups"`
-	MaxLogFileAge     int    `yaml:"maxLogFileAge"`
-}
-
-func (cfg LoggerConfig) validate() error {
-	if len(cfg.LogSaveFile) == 0 {
-		return errors.New("LogSaveFile length = 0")
-	}
-
-	if cfg.MaxLogFileSize <= 0 {
-		return errors.New("MaxLogFileSize <= 0")
-	}
-
-	if cfg.MaxLogFileBackups < 0 {
-		return errors.New("MaxLogFileBackups < 0")
-	}
-
-	if cfg.MaxLogFileAge <= 0 {
-		return errors.New("MaxLogFileAge <= 0")
 	}
 
 	return nil
@@ -102,7 +69,7 @@ func NewEnv() (env Env, err error) {
 		return env, err
 	}
 
-	if env.AppEnv == DevEnv {
+	if env.AppEnv == configs.DevEnv {
 		log.Println("The App is running in development env")
 	}
 

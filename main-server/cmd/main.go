@@ -1,6 +1,9 @@
 package main
 
 import (
+	"forest-run/common/configs"
+	defs2 "forest-run/common/defs"
+	logger2 "forest-run/common/logger"
 	"forest-run/main-server/api/route"
 	"forest-run/main-server/boot"
 	"forest-run/main-server/database"
@@ -32,14 +35,14 @@ func main() {
 		panic(err)
 	}
 
-	logger := boot.NewLogger(env)
+	logger := logger2.New(env.AppEnv, env.LoggerConfig)
 	defer logger.Sync()
 
 	logger.Sugar().Info("loaded env: ", env)
 
-	defs, err := boot.LoadDefs(env)
+	defs, err := defs2.Load(env.CommonConfig)
 	if err != nil {
-		logger.Fatal("Error on loading defs: ", zap.Error(err))
+		logger.Fatal("Error on loading defs2: ", zap.Error(err))
 	}
 
 	jwtProvider := jwt.NewProvider(env.JWTConfig)
@@ -63,7 +66,7 @@ func main() {
 
 	route.Setup(app, db, jwtProvider, notifs, defs, purchasingManager)
 
-	if env.AppEnv == boot.DevEnv {
+	if env.AppEnv == configs.DevEnv {
 		app.Get("/swagger/*", swagger.HandlerDefault)
 	}
 

@@ -1,18 +1,18 @@
-package boot
+package defs
 
 import (
 	"encoding/json"
-	"forest-run/common/defs"
+	"forest-run/common/configs"
 	"os"
 )
 
-func LoadDefs(env Env) (defs.Defs, error) {
+func Load(env configs.CommonConfig) (Defs, error) {
 	bytes, err := os.ReadFile(env.DefsPath)
 	if err != nil {
-		return defs.Defs{}, err
+		return Defs{}, err
 	}
 
-	var d defs.Defs
+	var d Defs
 	err = json.Unmarshal(bytes, &d)
 
 	return d, err

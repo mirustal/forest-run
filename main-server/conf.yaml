@@ -1,6 +1,7 @@
-appEnv: dev
-serverAddress: localhost:8080
-defsPath: defs.json
+commonConfig:
+  appEnv: dev
+  serverAddress: localhost:8080
+  defsPath: ../data/defs.json
 loggerConfig:
   logSaveFile: logs/log.log
   maxLogFileSize: 5

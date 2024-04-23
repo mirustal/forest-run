@@ -1,19 +1,20 @@
-package boot
+package logger
 
 import (
+	. "forest-run/common/configs"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-func NewLogger(env Env) *zap.Logger {
-	if env.AppEnv == ProdEnv {
+func New(envType EnvType, config LoggerConfig) *zap.Logger {
+	if envType == ProdEnv {
 
 		w := zapcore.AddSync(&lumberjack.Logger{
-			Filename:   env.LogSaveFile,
-			MaxSize:    env.MaxLogFileSize,
-			MaxBackups: env.MaxLogFileBackups,
-			MaxAge:     env.MaxLogFileAge,
+			Filename:   config.LogSaveFile,
+			MaxSize:    config.MaxLogFileSize,
+			MaxBackups: config.MaxLogFileBackups,
+			MaxAge:     config.MaxLogFileAge,
 		})
 
 		core := zapcore.NewCore(
