@@ -2,10 +2,10 @@ package auth
 
 import (
 	"errors"
-	"main-server/domain"
+	"forest-run/main-server/api/protocol"
 )
 
-func Validate(r domain.SignUpRequest) error {
+func Validate(r protocol.SignUpRequest) error {
 	if len(r.Username) == 0 {
 		return errors.New("empty login")
 	}

@@ -2,9 +2,9 @@ package database
 
 import (
 	"context"
+	"forest-run/main-server/domain"
 	"github.com/pashagolub/pgxmock/v3"
 	"github.com/stretchr/testify/assert"
-	"main-server/domain"
 	"testing"
 )
 

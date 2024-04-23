@@ -1,9 +1,9 @@
 package defs
 
-import "main-server/domain"
+import "forest-run/common/runs"
 
 type RunPermissionsDefs struct {
-	Types map[domain.RunPermissionsType]RunPermissionsDef `json:"types,omitempty"`
+	Types map[runs.PermissionsType]RunPermissionsDef `json:"types,omitempty"`
 }
 
 type RunPermissionsDef struct {

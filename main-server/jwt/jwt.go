@@ -3,9 +3,9 @@ package jwt
 import (
 	"errors"
 	"fmt"
+	"forest-run/main-server/boot"
+	"forest-run/main-server/domain"
 	"github.com/golang-jwt/jwt/v5"
-	"main-server/boot"
-	"main-server/domain"
 	"math/rand"
 	"time"
 )

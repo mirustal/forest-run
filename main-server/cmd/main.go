@@ -1,19 +1,19 @@
 package main
 
 import (
+	"forest-run/main-server/api/route"
+	"forest-run/main-server/boot"
+	"forest-run/main-server/database"
+	_ "forest-run/main-server/docs"
+	"forest-run/main-server/jwt"
+	"forest-run/main-server/notifications"
+	"forest-run/main-server/purchasing"
 	"github.com/gofiber/contrib/fiberzap/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/swagger"
 	"go.uber.org/zap"
-	"main-server/api/route"
-	"main-server/boot"
-	"main-server/database"
-	_ "main-server/docs"
-	"main-server/jwt"
-	"main-server/notifications"
-	"main-server/purchasing"
 )
 
 //	@title		Forest Run API

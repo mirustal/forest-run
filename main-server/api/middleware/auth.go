@@ -1,9 +1,10 @@
 package middleware
 
 import (
+	"forest-run/main-server/api/protocol"
+	"forest-run/main-server/domain"
+	"forest-run/main-server/jwt"
 	"github.com/gofiber/fiber/v2"
-	"main-server/domain"
-	"main-server/jwt"
 	"net/http"
 	"strings"
 )
@@ -24,7 +25,7 @@ func (a auth) authorize(ctx *fiber.Ctx) error {
 	token := ctx.Get("Authorization", "")
 
 	if strings.HasPrefix(token, "Bearer ") == false {
-		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{
+		return ctx.Status(http.StatusBadRequest).JSON(protocol.ErrorResponse{
 			Message: "authorization header must start with Bearer",
 		})
 	}
@@ -32,7 +33,7 @@ func (a auth) authorize(ctx *fiber.Ctx) error {
 	token = strings.Replace(token, "Bearer ", "", 1)
 
 	if token == "" {
-		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{
+		return ctx.Status(http.StatusBadRequest).JSON(protocol.ErrorResponse{
 			Message: "authorization header not provided",
 		})
 	}
@@ -40,7 +41,7 @@ func (a auth) authorize(ctx *fiber.Ctx) error {
 	authData, err := a.jwt.Parse(domain.JWTToken(token))
 	if err != nil {
 		ctx.Context().Logger().Printf("error while parsing jwt token: %v", err.Error())
-		return ctx.Status(http.StatusUnauthorized).JSON(domain.ErrorResponse{
+		return ctx.Status(http.StatusUnauthorized).JSON(protocol.ErrorResponse{
 			Message: "error while parsing jwt token",
 		})
 	}

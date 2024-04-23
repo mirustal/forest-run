@@ -1,14 +1,14 @@
 package runs
 
 import (
+	"forest-run/common/defs"
+	"forest-run/main-server/api/controller"
+	"forest-run/main-server/api/middleware"
+	"forest-run/main-server/api/protocol"
+	"forest-run/main-server/database"
+	"forest-run/main-server/notifications"
+	"forest-run/main-server/purchasing"
 	"github.com/gofiber/fiber/v2"
-	"main-server/api/controller"
-	"main-server/api/middleware"
-	"main-server/database"
-	"main-server/defs"
-	"main-server/domain"
-	"main-server/notifications"
-	"main-server/purchasing"
 	"net/http"
 	"time"
 )
@@ -25,26 +25,26 @@ func NewUpdate(db database.DbAdapter, notifs notifications.Manager, defs defs.De
 }
 
 func (c update) Handle(ctx *fiber.Ctx) error {
-	request := new(domain.UpdateRunRequest)
+	request := new(protocol.UpdateRunRequest)
 	if err := ctx.BodyParser(request); err != nil {
-		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "can't parse request json"})
+		return ctx.Status(http.StatusBadRequest).JSON(protocol.ErrorResponse{Message: "can't parse request json"})
 	}
 
 	authData := middleware.GetAuthData(ctx)
 
 	run, err := c.db.GetRun(request.RunId, ctx.UserContext())
 	if err != nil {
-		return ctx.Status(http.StatusInternalServerError).JSON(domain.ErrorResponse{Message: "can't get run from db"})
+		return ctx.Status(http.StatusInternalServerError).JSON(protocol.ErrorResponse{Message: "can't get run from db"})
 	}
 
 	if run.Creator != authData.UserId {
-		return ctx.Status(http.StatusMethodNotAllowed).JSON(domain.ErrorResponse{Message: "you can't update this run"})
+		return ctx.Status(http.StatusMethodNotAllowed).JSON(protocol.ErrorResponse{Message: "you can't update this run"})
 	}
 
 	if request.PermissionsTransactionId != nil && request.RunPermissions != nil {
 		err := c.purchases.ValidateRunPermissionsTransaction(*request.PermissionsTransactionId, *request.RunPermissions, ctx.UserContext())
 		if err != nil {
-			return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "invalid permissions transaction"})
+			return ctx.Status(http.StatusBadRequest).JSON(protocol.ErrorResponse{Message: "invalid permissions transaction"})
 		}
 
 		run.RunPermissions = *request.RunPermissions
@@ -52,7 +52,7 @@ func (c update) Handle(ctx *fiber.Ctx) error {
 
 	if request.StartTime != nil {
 		if (*request.StartTime).Before(time.Now()) {
-			return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "start time can't be in the past"})
+			return ctx.Status(http.StatusBadRequest).JSON(protocol.ErrorResponse{Message: "start time can't be in the past"})
 		}
 
 		run.StartTime = *request.StartTime
@@ -60,11 +60,11 @@ func (c update) Handle(ctx *fiber.Ctx) error {
 
 	if request.RegistrationUntil != nil {
 		if (*request.RegistrationUntil).Before(time.Now()) {
-			return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "registration time can't be in the past"})
+			return ctx.Status(http.StatusBadRequest).JSON(protocol.ErrorResponse{Message: "registration time can't be in the past"})
 		}
 
 		if (*request.RegistrationUntil).After(run.StartTime) {
-			return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "registration time can't be after start time"})
+			return ctx.Status(http.StatusBadRequest).JSON(protocol.ErrorResponse{Message: "registration time can't be after start time"})
 		}
 
 		run.RegistrationUntil = *request.RegistrationUntil
@@ -104,8 +104,8 @@ func (c update) Handle(ctx *fiber.Ctx) error {
 
 	err = c.db.UpdateRun(run, ctx.UserContext())
 	if err != nil {
-		return ctx.Status(http.StatusInternalServerError).JSON(domain.ErrorResponse{Message: "can't store run"})
+		return ctx.Status(http.StatusInternalServerError).JSON(protocol.ErrorResponse{Message: "can't store run"})
 	}
 
-	return ctx.Status(http.StatusOK).JSON(domain.UpdateRunResponse{Run: run})
+	return ctx.Status(http.StatusOK).JSON(protocol.UpdateRunResponse{Run: run})
 }

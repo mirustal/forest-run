@@ -2,17 +2,17 @@ package database
 
 import (
 	"context"
-	"main-server/domain"
+	"forest-run/common"
 )
 
 type SubscriptionsRepo interface {
-	Subscribe(subscriber domain.UserId, receiver domain.UserId, ctx context.Context) (bool, error)
-	Unsubscribe(subscriber domain.UserId, receiver domain.UserId, ctx context.Context) error
-	GetSubscriptions(subscriber domain.UserId, ctx context.Context) ([]domain.UserId, error)
-	GetSubscribers(user domain.UserId, ctx context.Context) ([]domain.UserId, error)
+	Subscribe(subscriber common.UserId, receiver common.UserId, ctx context.Context) (bool, error)
+	Unsubscribe(subscriber common.UserId, receiver common.UserId, ctx context.Context) error
+	GetSubscriptions(subscriber common.UserId, ctx context.Context) ([]common.UserId, error)
+	GetSubscribers(user common.UserId, ctx context.Context) ([]common.UserId, error)
 }
 
-func (p PgDbAdapter) Subscribe(subscriber domain.UserId, receiver domain.UserId, ctx context.Context) (subscribed bool, err error) {
+func (p PgDbAdapter) Subscribe(subscriber common.UserId, receiver common.UserId, ctx context.Context) (subscribed bool, err error) {
 	t, err := p.dbPool.Begin(ctx)
 	if err != nil {
 		t.Rollback(ctx)
@@ -28,7 +28,7 @@ func (p PgDbAdapter) Subscribe(subscriber domain.UserId, receiver domain.UserId,
 	return c.RowsAffected() > 0, t.Commit(ctx)
 }
 
-func (p PgDbAdapter) Unsubscribe(subscriber domain.UserId, receiver domain.UserId, ctx context.Context) error {
+func (p PgDbAdapter) Unsubscribe(subscriber common.UserId, receiver common.UserId, ctx context.Context) error {
 	t, err := p.dbPool.Begin(ctx)
 	if err != nil {
 		t.Rollback(ctx)
@@ -44,7 +44,7 @@ func (p PgDbAdapter) Unsubscribe(subscriber domain.UserId, receiver domain.UserI
 	return t.Commit(ctx)
 }
 
-func (p PgDbAdapter) GetSubscriptions(subscriber domain.UserId, ctx context.Context) (subscriptions []domain.UserId, err error) {
+func (p PgDbAdapter) GetSubscriptions(subscriber common.UserId, ctx context.Context) (subscriptions []common.UserId, err error) {
 	t, err := p.dbPool.Begin(ctx)
 	defer func() {
 		if err != nil {
@@ -62,12 +62,12 @@ func (p PgDbAdapter) GetSubscriptions(subscriber domain.UserId, ctx context.Cont
 		return subscriptions, err
 	}
 
-	subscriptions = make([]domain.UserId, 0)
+	subscriptions = make([]common.UserId, 0)
 	for r.Next() {
 		if err = r.Err(); err != nil {
 			return subscriptions, err
 		}
-		var sub domain.UserId
+		var sub common.UserId
 		err = r.Scan(&sub)
 		if err != nil {
 			return subscriptions, err
@@ -82,7 +82,7 @@ func (p PgDbAdapter) GetSubscriptions(subscriber domain.UserId, ctx context.Cont
 	return subscriptions, t.Commit(ctx)
 }
 
-func (p PgDbAdapter) GetSubscribers(user domain.UserId, ctx context.Context) (subscribers []domain.UserId, err error) {
+func (p PgDbAdapter) GetSubscribers(user common.UserId, ctx context.Context) (subscribers []common.UserId, err error) {
 	t, err := p.dbPool.Begin(ctx)
 	defer func() {
 		if err != nil {
@@ -100,12 +100,12 @@ func (p PgDbAdapter) GetSubscribers(user domain.UserId, ctx context.Context) (su
 		return subscribers, err
 	}
 
-	subscribers = make([]domain.UserId, 0)
+	subscribers = make([]common.UserId, 0)
 	for r.Next() {
 		if err = r.Err(); err != nil {
 			return subscribers, err
 		}
-		var sub domain.UserId
+		var sub common.UserId
 		err = r.Scan(&sub)
 		if err != nil {
 			return subscribers, err

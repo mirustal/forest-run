@@ -15,6 +15,66 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/runs/Invite": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Invite run",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "runs"
+                ],
+                "summary": "Invite run",
+                "parameters": [
+                    {
+                        "description": "input",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/protocol.InviteRunRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.InviteRunResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ErrorResponse"
+                        }
+                    },
+                    "405": {
+                        "description": "Method Not Allowed",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/protocol.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/runs/create": {
             "post": {
                 "security": [
@@ -37,7 +97,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.CreateRunRequest"
+                            "$ref": "#/definitions/protocol.CreateRunRequest"
                         }
                     }
                 ],
@@ -45,25 +105,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.CreateRunResponse"
+                            "$ref": "#/definitions/protocol.CreateRunResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     }
                 }
@@ -91,7 +151,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.UpdateRunRequest"
+                            "$ref": "#/definitions/protocol.UpdateRunRequest"
                         }
                     }
                 ],
@@ -99,31 +159,31 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.UpdateRunResponse"
+                            "$ref": "#/definitions/protocol.UpdateRunResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     },
                     "405": {
                         "description": "Method Not Allowed",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     }
                 }
@@ -151,7 +211,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.SubscriptionRequest"
+                            "$ref": "#/definitions/protocol.SubscriptionRequest"
                         }
                     }
                 ],
@@ -159,25 +219,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.SubscriptionResponse"
+                            "$ref": "#/definitions/protocol.SubscriptionResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     }
                 }
@@ -205,7 +265,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.SubscriptionRequest"
+                            "$ref": "#/definitions/protocol.SubscriptionRequest"
                         }
                     }
                 ],
@@ -213,25 +273,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.SubscriptionResponse"
+                            "$ref": "#/definitions/protocol.SubscriptionResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     }
                 }
@@ -259,7 +319,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.RefreshTokensRequest"
+                            "$ref": "#/definitions/protocol.RefreshTokensRequest"
                         }
                     }
                 ],
@@ -267,25 +327,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.RefreshTokensResponse"
+                            "$ref": "#/definitions/protocol.RefreshTokensResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     }
                 }
@@ -308,7 +368,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.SignInRequest"
+                            "$ref": "#/definitions/protocol.SignInRequest"
                         }
                     }
                 ],
@@ -316,25 +376,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.SignInResponse"
+                            "$ref": "#/definitions/protocol.SignInResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     }
                 }
@@ -357,7 +417,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.SignUpRequest"
+                            "$ref": "#/definitions/protocol.SignUpRequest"
                         }
                     }
                 ],
@@ -365,25 +425,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.SignUpResponse"
+                            "$ref": "#/definitions/protocol.SignUpResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/domain.ErrorResponse"
+                            "$ref": "#/definitions/protocol.ErrorResponse"
                         }
                     }
                 }
@@ -391,77 +451,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "domain.CreateRunRequest": {
-            "type": "object",
-            "properties": {
-                "avatar_url": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "max_participants": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "official_site_url": {
-                    "type": "string"
-                },
-                "participation_format": {
-                    "$ref": "#/definitions/domain.RunParticipationFormat"
-                },
-                "permissions": {
-                    "$ref": "#/definitions/domain.RunPermissionsType"
-                },
-                "registration_until": {
-                    "type": "string"
-                },
-                "route": {
-                    "$ref": "#/definitions/domain.Route"
-                },
-                "start_place": {
-                    "$ref": "#/definitions/domain.Place"
-                },
-                "start_time": {
-                    "type": "string"
-                },
-                "transaction_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "domain.CreateRunResponse": {
-            "type": "object",
-            "properties": {
-                "run": {
-                    "$ref": "#/definitions/domain.Run"
-                }
-            }
-        },
-        "domain.ErrorCode": {
-            "type": "integer",
-            "enum": [
-                1,
-                2
-            ],
-            "x-enum-varnames": [
-                "CodeUserNameAlreadyTaken",
-                "CodeWrongPassword"
-            ]
-        },
-        "domain.ErrorResponse": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "$ref": "#/definitions/domain.ErrorCode"
-                },
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
         "domain.JWTTokenData": {
             "type": "object",
             "properties": {
@@ -470,61 +459,6 @@ const docTemplate = `{
                 },
                 "token": {
                     "type": "string"
-                }
-            }
-        },
-        "domain.Place": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "point": {
-                    "$ref": "#/definitions/domain.Point"
-                }
-            }
-        },
-        "domain.Point": {
-            "type": "object",
-            "properties": {
-                "latitude": {
-                    "type": "number"
-                },
-                "longitude": {
-                    "type": "number"
-                }
-            }
-        },
-        "domain.RefreshTokensRequest": {
-            "type": "object",
-            "properties": {
-                "authToken": {
-                    "type": "string"
-                },
-                "refreshToken": {
-                    "type": "string"
-                }
-            }
-        },
-        "domain.RefreshTokensResponse": {
-            "type": "object",
-            "properties": {
-                "authToken": {
-                    "$ref": "#/definitions/domain.JWTTokenData"
-                },
-                "refreshToken": {
-                    "type": "string"
-                }
-            }
-        },
-        "domain.Route": {
-            "type": "object",
-            "properties": {
-                "points": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/domain.Point"
-                    }
                 }
             }
         },
@@ -556,16 +490,16 @@ const docTemplate = `{
                     "$ref": "#/definitions/domain.RunParticipationFormat"
                 },
                 "permissions": {
-                    "$ref": "#/definitions/domain.RunPermissionsType"
+                    "$ref": "#/definitions/runs.PermissionsType"
                 },
                 "registration_until": {
                     "type": "string"
                 },
                 "route": {
-                    "$ref": "#/definitions/domain.Route"
+                    "$ref": "#/definitions/runs.Route"
                 },
                 "start_place": {
-                    "$ref": "#/definitions/domain.Place"
+                    "$ref": "#/definitions/runs.Place"
                 },
                 "start_time": {
                     "type": "string"
@@ -586,15 +520,6 @@ const docTemplate = `{
                 "ClosedRunFormat"
             ]
         },
-        "domain.RunPermissionsType": {
-            "type": "integer",
-            "enum": [
-                0
-            ],
-            "x-enum-varnames": [
-                "FreeRunPermissionsType"
-            ]
-        },
         "domain.RunStatus": {
             "type": "integer",
             "enum": [
@@ -610,54 +535,7 @@ const docTemplate = `{
                 "CanceledRunStatus"
             ]
         },
-        "domain.SignInRequest": {
-            "type": "object",
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "domain.SignInResponse": {
-            "type": "object",
-            "properties": {
-                "authToken": {
-                    "$ref": "#/definitions/domain.JWTTokenData"
-                },
-                "refreshToken": {
-                    "type": "string"
-                }
-            }
-        },
-        "domain.SignUpRequest": {
-            "type": "object",
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "domain.SignUpResponse": {
-            "type": "object"
-        },
-        "domain.SubscriptionRequest": {
-            "type": "object",
-            "properties": {
-                "userId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "domain.SubscriptionResponse": {
-            "type": "object"
-        },
-        "domain.UpdateRunRequest": {
+        "protocol.CreateRunRequest": {
             "type": "object",
             "properties": {
                 "avatar_url": {
@@ -679,19 +557,16 @@ const docTemplate = `{
                     "$ref": "#/definitions/domain.RunParticipationFormat"
                 },
                 "permissions": {
-                    "$ref": "#/definitions/domain.RunPermissionsType"
+                    "$ref": "#/definitions/runs.PermissionsType"
                 },
                 "registration_until": {
                     "type": "string"
                 },
                 "route": {
-                    "$ref": "#/definitions/domain.Route"
-                },
-                "run_id": {
-                    "type": "integer"
+                    "$ref": "#/definitions/runs.Route"
                 },
                 "start_place": {
-                    "$ref": "#/definitions/domain.Place"
+                    "$ref": "#/definitions/runs.Place"
                 },
                 "start_time": {
                     "type": "string"
@@ -701,11 +576,213 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.UpdateRunResponse": {
+        "protocol.CreateRunResponse": {
             "type": "object",
             "properties": {
                 "run": {
                     "$ref": "#/definitions/domain.Run"
+                }
+            }
+        },
+        "protocol.ErrorCode": {
+            "type": "integer",
+            "enum": [
+                1,
+                2
+            ],
+            "x-enum-varnames": [
+                "CodeUserNameAlreadyTaken",
+                "CodeWrongPassword"
+            ]
+        },
+        "protocol.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "$ref": "#/definitions/protocol.ErrorCode"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "protocol.InviteRunRequest": {
+            "type": "object",
+            "properties": {
+                "run_id": {
+                    "type": "integer"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "protocol.InviteRunResponse": {
+            "type": "object"
+        },
+        "protocol.RefreshTokensRequest": {
+            "type": "object",
+            "properties": {
+                "authToken": {
+                    "type": "string"
+                },
+                "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "protocol.RefreshTokensResponse": {
+            "type": "object",
+            "properties": {
+                "authToken": {
+                    "$ref": "#/definitions/domain.JWTTokenData"
+                },
+                "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "protocol.SignInRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "protocol.SignInResponse": {
+            "type": "object",
+            "properties": {
+                "authToken": {
+                    "$ref": "#/definitions/domain.JWTTokenData"
+                },
+                "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "protocol.SignUpRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "protocol.SignUpResponse": {
+            "type": "object"
+        },
+        "protocol.SubscriptionRequest": {
+            "type": "object",
+            "properties": {
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "protocol.SubscriptionResponse": {
+            "type": "object"
+        },
+        "protocol.UpdateRunRequest": {
+            "type": "object",
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "max_participants": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "official_site_url": {
+                    "type": "string"
+                },
+                "participation_format": {
+                    "$ref": "#/definitions/domain.RunParticipationFormat"
+                },
+                "permissions": {
+                    "$ref": "#/definitions/runs.PermissionsType"
+                },
+                "registration_until": {
+                    "type": "string"
+                },
+                "route": {
+                    "$ref": "#/definitions/runs.Route"
+                },
+                "run_id": {
+                    "type": "integer"
+                },
+                "start_place": {
+                    "$ref": "#/definitions/runs.Place"
+                },
+                "start_time": {
+                    "type": "string"
+                },
+                "transaction_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "protocol.UpdateRunResponse": {
+            "type": "object",
+            "properties": {
+                "run": {
+                    "$ref": "#/definitions/domain.Run"
+                }
+            }
+        },
+        "runs.PermissionsType": {
+            "type": "integer",
+            "enum": [
+                0
+            ],
+            "x-enum-varnames": [
+                "FreePermissionsType"
+            ]
+        },
+        "runs.Place": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "point": {
+                    "$ref": "#/definitions/runs.Point"
+                }
+            }
+        },
+        "runs.Point": {
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                }
+            }
+        },
+        "runs.Route": {
+            "type": "object",
+            "properties": {
+                "points": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/runs.Point"
+                    }
                 }
             }
         }

@@ -1,8 +1,8 @@
 package auth
 
 import (
+	"forest-run/main-server/domain"
 	"golang.org/x/crypto/bcrypt"
-	"main-server/domain"
 )
 
 const maxBcryptPasswordLength = 72

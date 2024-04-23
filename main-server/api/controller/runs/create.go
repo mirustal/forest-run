@@ -1,14 +1,16 @@
 package runs
 
 import (
+	"forest-run/common/defs"
+	"forest-run/common/runs"
+	"forest-run/main-server/api/controller"
+	"forest-run/main-server/api/middleware"
+	"forest-run/main-server/api/protocol"
+	"forest-run/main-server/database"
+	"forest-run/main-server/domain"
+	"forest-run/main-server/notifications"
+	"forest-run/main-server/purchasing"
 	"github.com/gofiber/fiber/v2"
-	"main-server/api/controller"
-	"main-server/api/middleware"
-	"main-server/database"
-	"main-server/defs"
-	"main-server/domain"
-	"main-server/notifications"
-	"main-server/purchasing"
 	"net/http"
 	"time"
 )
@@ -25,9 +27,9 @@ func NewCreate(db database.DbAdapter, notifs notifications.Manager, defs defs.De
 }
 
 func (c create) Handle(ctx *fiber.Ctx) error {
-	request := new(domain.CreateRunRequest)
+	request := new(protocol.CreateRunRequest)
 	if err := ctx.BodyParser(request); err != nil {
-		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "can't parse request json"})
+		return ctx.Status(http.StatusBadRequest).JSON(protocol.ErrorResponse{Message: "can't parse request json"})
 	}
 
 	authData := middleware.GetAuthData(ctx)
@@ -35,19 +37,19 @@ func (c create) Handle(ctx *fiber.Ctx) error {
 	if request.PermissionsTransactionId != nil {
 		err := c.purchases.ValidateRunPermissionsTransaction(*request.PermissionsTransactionId, request.RunPermissions, ctx.UserContext())
 		if err != nil {
-			return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "invalid permissions transaction"})
+			return ctx.Status(http.StatusBadRequest).JSON(protocol.ErrorResponse{Message: "invalid permissions transaction"})
 		}
 	} else {
-		request.RunPermissions = domain.FreeRunPermissionsType
+		request.RunPermissions = runs.FreePermissionsType
 	}
 
 	_, ok := c.defs.RunPermissionsDefs.Types[request.RunPermissions]
 	if !ok {
-		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "invalid run permissions"})
+		return ctx.Status(http.StatusBadRequest).JSON(protocol.ErrorResponse{Message: "invalid run permissions"})
 	}
 
 	if request.StartTime.Before(time.Now()) {
-		return ctx.Status(http.StatusBadRequest).JSON(domain.ErrorResponse{Message: "start time can't be in the past"})
+		return ctx.Status(http.StatusBadRequest).JSON(protocol.ErrorResponse{Message: "start time can't be in the past"})
 	}
 
 	run := domain.Run{
@@ -56,13 +58,16 @@ func (c create) Handle(ctx *fiber.Ctx) error {
 		Description:         request.Description,
 		OfficialSiteUrl:     request.OfficialSiteUrl,
 		AvatarUrl:           request.AvatarUrl,
-		Route:               request.Route,
-		StartTime:           request.StartTime,
-		StartPlace:          request.StartPlace,
 		MaxParticipants:     request.MaxParticipants,
-		RunPermissions:      request.RunPermissions,
 		Status:              domain.OpenRunStatus,
 		ParticipationFormat: request.ParticipationFormat,
+
+		EssentialInfo: runs.EssentialInfo{
+			Route:          request.Route,
+			StartTime:      request.StartTime,
+			StartPlace:     request.StartPlace,
+			RunPermissions: request.RunPermissions,
+		},
 	}
 
 	if request.RegistrationUntil != nil {
@@ -73,13 +78,13 @@ func (c create) Handle(ctx *fiber.Ctx) error {
 
 	run, err := c.db.StoreRun(run, ctx.UserContext())
 	if err != nil {
-		return ctx.Status(http.StatusInternalServerError).JSON(domain.ErrorResponse{Message: "can't store run"})
+		return ctx.Status(http.StatusInternalServerError).JSON(protocol.ErrorResponse{Message: "can't store run"})
 	}
 
 	notif, err := domain.Notification{
-		Type:      domain.NewRunCreatedNotification,
+		Type:      notifications.NewRunCreated,
 		CreatedAt: time.Now(),
-	}.WithBody(domain.RunCreatedNotificationBody{RunId: run.Id})
+	}.WithBody(notifications.RunCreatedBody{RunId: run.Id})
 
 	if err != nil {
 		ctx.Context().Logger().Printf("can't create notification body: ", err)
@@ -90,5 +95,5 @@ func (c create) Handle(ctx *fiber.Ctx) error {
 		}
 	}
 
-	return ctx.Status(http.StatusOK).JSON(domain.CreateRunResponse{Run: run})
+	return ctx.Status(http.StatusOK).JSON(protocol.CreateRunResponse{Run: run})
 }

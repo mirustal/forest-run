@@ -2,7 +2,7 @@ package boot
 
 import (
 	"encoding/json"
-	"main-server/defs"
+	"forest-run/common/defs"
 	"os"
 )
 

@@ -3,15 +3,16 @@ package database
 import (
 	"context"
 	"encoding/json"
-	"main-server/domain"
+	"forest-run/common/runs"
+	"forest-run/main-server/domain"
 )
 
 type RunsRepo interface {
 	StoreRun(run domain.Run, ctx context.Context) (domain.Run, error)
 	UpdateRun(run domain.Run, ctx context.Context) error
-	GetUserCreatedRuns(userId string, ctx context.Context) ([]domain.RunId, error)
-	GetUserParticipatedRuns(userId string, ctx context.Context) ([]domain.RunId, error)
-	GetRun(runId domain.RunId, ctx context.Context) (run domain.Run, err error)
+	GetUserCreatedRuns(userId string, ctx context.Context) ([]runs.Id, error)
+	GetUserParticipatedRuns(userId string, ctx context.Context) ([]runs.Id, error)
+	GetRun(runId runs.Id, ctx context.Context) (run domain.Run, err error)
 }
 
 func (p PgDbAdapter) StoreRun(run domain.Run, ctx context.Context) (domain.Run, error) {
@@ -125,7 +126,7 @@ func (p PgDbAdapter) UpdateRun(run domain.Run, ctx context.Context) error {
 	return t.Commit(ctx)
 }
 
-func (p PgDbAdapter) GetRun(runId domain.RunId, ctx context.Context) (run domain.Run, err error) {
+func (p PgDbAdapter) GetRun(runId runs.Id, ctx context.Context) (run domain.Run, err error) {
 	t, err := p.dbPool.Begin(ctx)
 
 	defer func() {
@@ -183,12 +184,12 @@ func (p PgDbAdapter) GetRun(runId domain.RunId, ctx context.Context) (run domain
 	return run, t.Commit(ctx)
 }
 
-func (p PgDbAdapter) GetUserCreatedRuns(userId string, ctx context.Context) ([]domain.RunId, error) {
+func (p PgDbAdapter) GetUserCreatedRuns(userId string, ctx context.Context) ([]runs.Id, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p PgDbAdapter) GetUserParticipatedRuns(userId string, ctx context.Context) ([]domain.RunId, error) {
+func (p PgDbAdapter) GetUserParticipatedRuns(userId string, ctx context.Context) ([]runs.Id, error) {
 	//TODO implement me
 	panic("implement me")
 }

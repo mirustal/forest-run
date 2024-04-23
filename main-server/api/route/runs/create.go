@@ -1,12 +1,12 @@
 package runs
 
 import (
+	"forest-run/common/defs"
+	"forest-run/main-server/api/controller/runs"
+	"forest-run/main-server/database"
+	"forest-run/main-server/notifications"
+	"forest-run/main-server/purchasing"
 	"github.com/gofiber/fiber/v2"
-	"main-server/api/controller/runs"
-	"main-server/database"
-	"main-server/defs"
-	"main-server/notifications"
-	"main-server/purchasing"
 )
 
 // InitCreate
@@ -15,10 +15,10 @@ import (
 // @Tags			runs
 // @Produce		json
 // @Security		ApiKeyAuth
-// @Param			input	body		domain.CreateRunRequest	true "input"
-// @Success		200		{object}	domain.CreateRunResponse
-// @Failure		400,401	{object}	domain.ErrorResponse
-// @Failure		500		{object}	domain.ErrorResponse
+// @Param			input	body		protocol.CreateRunRequest	true "input"
+// @Success		200		{object}	protocol.CreateRunResponse
+// @Failure		400,401	{object}	protocol.ErrorResponse
+// @Failure		500		{object}	protocol.ErrorResponse
 // @Router			/api/runs/create [post]
 func InitCreate(group fiber.Router, db database.DbAdapter, notifs notifications.Manager, defs defs.Defs, purchases purchasing.Manager) {
 	c := runs.NewCreate(db, notifs, defs, purchases)

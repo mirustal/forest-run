@@ -1,93 +1,11 @@
 basePath: /
 definitions:
-  domain.CreateRunRequest:
-    properties:
-      avatar_url:
-        type: string
-      description:
-        type: string
-      max_participants:
-        type: integer
-      name:
-        type: string
-      official_site_url:
-        type: string
-      participation_format:
-        $ref: '#/definitions/domain.RunParticipationFormat'
-      permissions:
-        $ref: '#/definitions/domain.RunPermissionsType'
-      registration_until:
-        type: string
-      route:
-        $ref: '#/definitions/domain.Route'
-      start_place:
-        $ref: '#/definitions/domain.Place'
-      start_time:
-        type: string
-      transaction_id:
-        type: string
-    type: object
-  domain.CreateRunResponse:
-    properties:
-      run:
-        $ref: '#/definitions/domain.Run'
-    type: object
-  domain.ErrorCode:
-    enum:
-    - 1
-    - 2
-    type: integer
-    x-enum-varnames:
-    - CodeUserNameAlreadyTaken
-    - CodeWrongPassword
-  domain.ErrorResponse:
-    properties:
-      code:
-        $ref: '#/definitions/domain.ErrorCode'
-      message:
-        type: string
-    type: object
   domain.JWTTokenData:
     properties:
       expiresAt:
         type: string
       token:
         type: string
-    type: object
-  domain.Place:
-    properties:
-      address:
-        type: string
-      point:
-        $ref: '#/definitions/domain.Point'
-    type: object
-  domain.Point:
-    properties:
-      latitude:
-        type: number
-      longitude:
-        type: number
-    type: object
-  domain.RefreshTokensRequest:
-    properties:
-      authToken:
-        type: string
-      refreshToken:
-        type: string
-    type: object
-  domain.RefreshTokensResponse:
-    properties:
-      authToken:
-        $ref: '#/definitions/domain.JWTTokenData'
-      refreshToken:
-        type: string
-    type: object
-  domain.Route:
-    properties:
-      points:
-        items:
-          $ref: '#/definitions/domain.Point'
-        type: array
     type: object
   domain.Run:
     properties:
@@ -108,13 +26,13 @@ definitions:
       participation_format:
         $ref: '#/definitions/domain.RunParticipationFormat'
       permissions:
-        $ref: '#/definitions/domain.RunPermissionsType'
+        $ref: '#/definitions/runs.PermissionsType'
       registration_until:
         type: string
       route:
-        $ref: '#/definitions/domain.Route'
+        $ref: '#/definitions/runs.Route'
       start_place:
-        $ref: '#/definitions/domain.Place'
+        $ref: '#/definitions/runs.Place'
       start_time:
         type: string
       status:
@@ -128,12 +46,6 @@ definitions:
     x-enum-varnames:
     - OpenRunFormat
     - ClosedRunFormat
-  domain.RunPermissionsType:
-    enum:
-    - 0
-    type: integer
-    x-enum-varnames:
-    - FreeRunPermissionsType
   domain.RunStatus:
     enum:
     - 0
@@ -146,37 +58,7 @@ definitions:
     - RunningRunStatus
     - FinishedRunStatus
     - CanceledRunStatus
-  domain.SignInRequest:
-    properties:
-      password:
-        type: string
-      username:
-        type: string
-    type: object
-  domain.SignInResponse:
-    properties:
-      authToken:
-        $ref: '#/definitions/domain.JWTTokenData'
-      refreshToken:
-        type: string
-    type: object
-  domain.SignUpRequest:
-    properties:
-      password:
-        type: string
-      username:
-        type: string
-    type: object
-  domain.SignUpResponse:
-    type: object
-  domain.SubscriptionRequest:
-    properties:
-      userId:
-        type: integer
-    type: object
-  domain.SubscriptionResponse:
-    type: object
-  domain.UpdateRunRequest:
+  protocol.CreateRunRequest:
     properties:
       avatar_url:
         type: string
@@ -191,24 +73,153 @@ definitions:
       participation_format:
         $ref: '#/definitions/domain.RunParticipationFormat'
       permissions:
-        $ref: '#/definitions/domain.RunPermissionsType'
+        $ref: '#/definitions/runs.PermissionsType'
       registration_until:
         type: string
       route:
-        $ref: '#/definitions/domain.Route'
-      run_id:
-        type: integer
+        $ref: '#/definitions/runs.Route'
       start_place:
-        $ref: '#/definitions/domain.Place'
+        $ref: '#/definitions/runs.Place'
       start_time:
         type: string
       transaction_id:
         type: string
     type: object
-  domain.UpdateRunResponse:
+  protocol.CreateRunResponse:
     properties:
       run:
         $ref: '#/definitions/domain.Run'
+    type: object
+  protocol.ErrorCode:
+    enum:
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - CodeUserNameAlreadyTaken
+    - CodeWrongPassword
+  protocol.ErrorResponse:
+    properties:
+      code:
+        $ref: '#/definitions/protocol.ErrorCode'
+      message:
+        type: string
+    type: object
+  protocol.InviteRunRequest:
+    properties:
+      run_id:
+        type: integer
+      users:
+        items:
+          type: integer
+        type: array
+    type: object
+  protocol.InviteRunResponse:
+    type: object
+  protocol.RefreshTokensRequest:
+    properties:
+      authToken:
+        type: string
+      refreshToken:
+        type: string
+    type: object
+  protocol.RefreshTokensResponse:
+    properties:
+      authToken:
+        $ref: '#/definitions/domain.JWTTokenData'
+      refreshToken:
+        type: string
+    type: object
+  protocol.SignInRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  protocol.SignInResponse:
+    properties:
+      authToken:
+        $ref: '#/definitions/domain.JWTTokenData'
+      refreshToken:
+        type: string
+    type: object
+  protocol.SignUpRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  protocol.SignUpResponse:
+    type: object
+  protocol.SubscriptionRequest:
+    properties:
+      userId:
+        type: integer
+    type: object
+  protocol.SubscriptionResponse:
+    type: object
+  protocol.UpdateRunRequest:
+    properties:
+      avatar_url:
+        type: string
+      description:
+        type: string
+      max_participants:
+        type: integer
+      name:
+        type: string
+      official_site_url:
+        type: string
+      participation_format:
+        $ref: '#/definitions/domain.RunParticipationFormat'
+      permissions:
+        $ref: '#/definitions/runs.PermissionsType'
+      registration_until:
+        type: string
+      route:
+        $ref: '#/definitions/runs.Route'
+      run_id:
+        type: integer
+      start_place:
+        $ref: '#/definitions/runs.Place'
+      start_time:
+        type: string
+      transaction_id:
+        type: string
+    type: object
+  protocol.UpdateRunResponse:
+    properties:
+      run:
+        $ref: '#/definitions/domain.Run'
+    type: object
+  runs.PermissionsType:
+    enum:
+    - 0
+    type: integer
+    x-enum-varnames:
+    - FreePermissionsType
+  runs.Place:
+    properties:
+      address:
+        type: string
+      point:
+        $ref: '#/definitions/runs.Point'
+    type: object
+  runs.Point:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+    type: object
+  runs.Route:
+    properties:
+      points:
+        items:
+          $ref: '#/definitions/runs.Point'
+        type: array
     type: object
 host: localhost:8080
 info:
@@ -216,6 +227,44 @@ info:
   title: Forest Run API
   version: 0.0.1
 paths:
+  /api/runs/Invite:
+    post:
+      description: Invite run
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/protocol.InviteRunRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/protocol.InviteRunResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/protocol.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/protocol.ErrorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/protocol.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/protocol.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Invite run
+      tags:
+      - runs
   /api/runs/create:
     post:
       description: Create run
@@ -225,26 +274,26 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/domain.CreateRunRequest'
+          $ref: '#/definitions/protocol.CreateRunRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.CreateRunResponse'
+            $ref: '#/definitions/protocol.CreateRunResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
       security:
       - ApiKeyAuth: []
       summary: Create run
@@ -259,30 +308,30 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/domain.UpdateRunRequest'
+          $ref: '#/definitions/protocol.UpdateRunRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.UpdateRunResponse'
+            $ref: '#/definitions/protocol.UpdateRunResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
         "405":
           description: Method Not Allowed
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
       security:
       - ApiKeyAuth: []
       summary: Update run
@@ -297,26 +346,26 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/domain.SubscriptionRequest'
+          $ref: '#/definitions/protocol.SubscriptionRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.SubscriptionResponse'
+            $ref: '#/definitions/protocol.SubscriptionResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
       security:
       - ApiKeyAuth: []
       summary: Subscribe to user
@@ -331,26 +380,26 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/domain.SubscriptionRequest'
+          $ref: '#/definitions/protocol.SubscriptionRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.SubscriptionResponse'
+            $ref: '#/definitions/protocol.SubscriptionResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
       security:
       - ApiKeyAuth: []
       summary: Unsubscribe from user
@@ -365,26 +414,26 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/domain.RefreshTokensRequest'
+          $ref: '#/definitions/protocol.RefreshTokensRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.RefreshTokensResponse'
+            $ref: '#/definitions/protocol.RefreshTokensResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
       security:
       - ApiKeyAuth: []
       summary: Refresh Tokens
@@ -399,26 +448,26 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/domain.SignInRequest'
+          $ref: '#/definitions/protocol.SignInRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.SignInResponse'
+            $ref: '#/definitions/protocol.SignInResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
       summary: Sign In
       tags:
       - auth
@@ -431,26 +480,26 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/domain.SignUpRequest'
+          $ref: '#/definitions/protocol.SignUpRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.SignUpResponse'
+            $ref: '#/definitions/protocol.SignUpResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/domain.ErrorResponse'
+            $ref: '#/definitions/protocol.ErrorResponse'
       summary: Sign Up
       tags:
       - auth

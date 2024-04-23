@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"forest-run/common"
 	"time"
 )
 
@@ -16,6 +17,6 @@ type (
 		ExpiresAt *time.Time    `json:"expiresAt,omitempty"`
 	}
 	JWTBody struct {
-		UserId UserId `json:"userId"`
+		UserId common.UserId `json:"userId"`
 	}
 )

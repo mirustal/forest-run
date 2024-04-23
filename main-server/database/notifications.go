@@ -2,13 +2,14 @@ package database
 
 import (
 	"context"
+	"forest-run/common"
+	"forest-run/main-server/domain"
 	"github.com/jackc/pgx/v5"
-	"main-server/domain"
 )
 
 type NotificationsRepo interface {
 	Store(notification domain.Notification, ctx context.Context) error
-	GetNotifications(userId domain.UserId, ctx context.Context) ([]domain.Notification, error)
+	GetNotifications(userId common.UserId, ctx context.Context) ([]domain.Notification, error)
 	StoreMany(notifications []domain.Notification, ctx context.Context) error
 }
 
@@ -28,7 +29,7 @@ func (p PgDbAdapter) Store(notification domain.Notification, ctx context.Context
 	return t.Commit(ctx)
 }
 
-func (p PgDbAdapter) GetNotifications(userId domain.UserId, ctx context.Context) ([]domain.Notification, error) {
+func (p PgDbAdapter) GetNotifications(userId common.UserId, ctx context.Context) ([]domain.Notification, error) {
 	t, err := p.dbPool.Begin(ctx)
 	if err != nil {
 		t.Rollback(ctx)

@@ -1,12 +1,13 @@
 package domain
 
+import "forest-run/common"
+
 type (
-	UserId   int
 	Username string
 )
 
 type User struct {
-	Id               UserId
+	Id               common.UserId
 	Username         Username
 	HashedPassword   HashedPassword
 	RefreshTokenData RefreshTokenData

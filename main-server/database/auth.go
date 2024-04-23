@@ -4,15 +4,16 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"forest-run/common"
+	"forest-run/main-server/domain"
 	"github.com/jackc/pgx/v5/pgconn"
-	"main-server/domain"
 )
 
 type AuthRepo interface {
 	StoreNewUser(username domain.Username, password domain.HashedPassword, ctx context.Context) error
 	GetUserByUsername(username domain.Username, ctx context.Context) (domain.User, error)
-	StoreUserRefreshToken(id domain.UserId, data domain.RefreshTokenData, ctx context.Context) error
-	GetUserRefreshToken(id domain.UserId, ctx context.Context) (data domain.RefreshTokenData, err error)
+	StoreUserRefreshToken(id common.UserId, data domain.RefreshTokenData, ctx context.Context) error
+	GetUserRefreshToken(id common.UserId, ctx context.Context) (data domain.RefreshTokenData, err error)
 }
 
 func (p PgDbAdapter) StoreNewUser(username domain.Username, password domain.HashedPassword, ctx context.Context) error {
@@ -52,7 +53,7 @@ func (p PgDbAdapter) GetUserByUsername(username domain.Username, ctx context.Con
 	return user, nil
 }
 
-func (p PgDbAdapter) GetUserById(id domain.UserId, ctx context.Context) (user domain.User, err error) {
+func (p PgDbAdapter) GetUserById(id common.UserId, ctx context.Context) (user domain.User, err error) {
 	t, err := p.dbPool.Begin(ctx)
 	defer t.Rollback(ctx)
 	if err != nil {
@@ -68,7 +69,7 @@ func (p PgDbAdapter) GetUserById(id domain.UserId, ctx context.Context) (user do
 	return user, nil
 }
 
-func (p PgDbAdapter) StoreUserRefreshToken(id domain.UserId, data domain.RefreshTokenData, ctx context.Context) error {
+func (p PgDbAdapter) StoreUserRefreshToken(id common.UserId, data domain.RefreshTokenData, ctx context.Context) error {
 	t, err := p.dbPool.Begin(ctx)
 	if err != nil {
 		defer t.Rollback(ctx)
@@ -89,7 +90,7 @@ func (p PgDbAdapter) StoreUserRefreshToken(id domain.UserId, data domain.Refresh
 	return t.Commit(ctx)
 }
 
-func (p PgDbAdapter) GetUserRefreshToken(id domain.UserId, ctx context.Context) (data domain.RefreshTokenData, err error) {
+func (p PgDbAdapter) GetUserRefreshToken(id common.UserId, ctx context.Context) (data domain.RefreshTokenData, err error) {
 	t, err := p.dbPool.Begin(ctx)
 	defer t.Rollback(ctx)
 	if err != nil {

@@ -2,14 +2,15 @@ package notifications
 
 import (
 	"context"
-	"main-server/database"
-	"main-server/domain"
+	"forest-run/common"
+	"forest-run/main-server/database"
+	"forest-run/main-server/domain"
 )
 
 type Manager interface {
 	Send(notification domain.Notification, ctx context.Context) error
-	SendToSubscribers(sender domain.UserId, notification domain.Notification, ctx context.Context) error
-	Consume(consumer domain.UserId, ctx context.Context) ([]domain.Notification, error)
+	SendToSubscribers(sender common.UserId, notification domain.Notification, ctx context.Context) error
+	Consume(consumer common.UserId, ctx context.Context) ([]domain.Notification, error)
 }
 
 type manager struct {
@@ -24,7 +25,7 @@ func (m manager) Send(notification domain.Notification, ctx context.Context) err
 	return m.db.Store(notification, ctx)
 }
 
-func (m manager) SendToSubscribers(sender domain.UserId, notification domain.Notification, ctx context.Context) error {
+func (m manager) SendToSubscribers(sender common.UserId, notification domain.Notification, ctx context.Context) error {
 	subs, err := m.db.GetSubscribers(sender, ctx)
 	if err != nil {
 		return err
@@ -42,6 +43,6 @@ func (m manager) SendToSubscribers(sender domain.UserId, notification domain.Not
 	return m.db.StoreMany(notifs, ctx)
 }
 
-func (m manager) Consume(consumer domain.UserId, ctx context.Context) ([]domain.Notification, error) {
+func (m manager) Consume(consumer common.UserId, ctx context.Context) ([]domain.Notification, error) {
 	return m.db.GetNotifications(consumer, ctx)
 }

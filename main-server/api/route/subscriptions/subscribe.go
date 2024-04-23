@@ -1,10 +1,10 @@
 package subscriptions
 
 import (
+	"forest-run/main-server/api/controller/subscriptions"
+	"forest-run/main-server/database"
+	"forest-run/main-server/notifications"
 	"github.com/gofiber/fiber/v2"
-	"main-server/api/controller/subscriptions"
-	"main-server/database"
-	"main-server/notifications"
 )
 
 // InitSubscribe
@@ -13,10 +13,10 @@ import (
 // @Tags			subscriptions
 // @Produce		json
 // @Security		ApiKeyAuth
-// @Param			input	body		domain.SubscriptionRequest	true "input"
-// @Success		200		{object}	domain.SubscriptionResponse
-// @Failure		400,401	{object}	domain.ErrorResponse
-// @Failure		500		{object}	domain.ErrorResponse
+// @Param			input	body		protocol.SubscriptionRequest	true "input"
+// @Success		200		{object}	protocol.SubscriptionResponse
+// @Failure		400,401	{object}	protocol.ErrorResponse
+// @Failure		500		{object}	protocol.ErrorResponse
 // @Router			/api/subscribe [post]
 func InitSubscribe(group fiber.Router, notifs notifications.Manager, db database.DbAdapter) {
 	c := subscriptions.NewSubscribe(notifs, db)

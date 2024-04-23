@@ -1,8 +1,10 @@
-package domain
+package protocol
+
+import "forest-run/common"
 
 type (
 	SubscriptionRequest struct {
-		UserId UserId
+		UserId common.UserId
 	}
 	SubscriptionResponse struct {
 	}

@@ -2,11 +2,12 @@ package purchasing
 
 import (
 	"context"
-	"main-server/domain"
+	"forest-run/common/runs"
+	"forest-run/main-server/domain"
 )
 
 type Manager interface {
-	ValidateRunPermissionsTransaction(id domain.TransactionId, permissions domain.RunPermissionsType, ctx context.Context) error
+	ValidateRunPermissionsTransaction(id domain.TransactionId, permissions runs.PermissionsType, ctx context.Context) error
 }
 
 type manager struct {
@@ -16,6 +17,6 @@ func NewManager() Manager {
 	return &manager{}
 }
 
-func (m manager) ValidateRunPermissionsTransaction(id domain.TransactionId, permissions domain.RunPermissionsType, ctx context.Context) error {
+func (m manager) ValidateRunPermissionsTransaction(id domain.TransactionId, permissions runs.PermissionsType, ctx context.Context) error {
 	return nil
 }

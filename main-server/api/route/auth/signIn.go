@@ -1,10 +1,10 @@
 package auth
 
 import (
+	"forest-run/main-server/api/controller/auth"
+	"forest-run/main-server/database"
+	"forest-run/main-server/jwt"
 	"github.com/gofiber/fiber/v2"
-	"main-server/api/controller/auth"
-	"main-server/database"
-	"main-server/jwt"
 )
 
 // InitSignIn
@@ -13,10 +13,10 @@ import (
 // @Tags			auth
 // @Accepts		json
 // @Produce		json
-// @Param			input	body		domain.SignInRequest	true	"SignIn data"
-// @Success		200		{object}	domain.SignInResponse
-// @Failure		400,401	{object}	domain.ErrorResponse
-// @Failure		500		{object}	domain.ErrorResponse
+// @Param			input	body		protocol.SignInRequest	true	"SignIn data"
+// @Success		200		{object}	protocol.SignInResponse
+// @Failure		400,401	{object}	protocol.ErrorResponse
+// @Failure		500		{object}	protocol.ErrorResponse
 // @Router			/auth/sign-in [post]
 func InitSignIn(app fiber.Router, db database.DbAdapter, jwt jwt.Provider) {
 	c := auth.NewSignIn(db, jwt)

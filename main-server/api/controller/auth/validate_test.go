@@ -1,57 +1,57 @@
 package auth
 
 import (
+	"forest-run/main-server/api/protocol"
 	"github.com/stretchr/testify/assert"
-	"main-server/domain"
 	"testing"
 )
 
 func TestValidate(t *testing.T) {
 	cases := []struct {
-		r     domain.SignUpRequest
+		r     protocol.SignUpRequest
 		valid bool
 	}{
 		{
-			domain.SignUpRequest{
+			protocol.SignUpRequest{
 				Username: "test",
 				Password: "test",
 			},
 			true,
 		},
 		{
-			domain.SignUpRequest{
+			protocol.SignUpRequest{
 				Username: "",
 				Password: "test",
 			},
 			false,
 		},
 		{
-			domain.SignUpRequest{
+			protocol.SignUpRequest{
 				Username: "test",
 				Password: "",
 			},
 			false,
 		},
 		{
-			domain.SignUpRequest{},
+			protocol.SignUpRequest{},
 			false,
 		},
 		{
-			domain.SignUpRequest{
+			protocol.SignUpRequest{
 				Username: "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
 				Password: "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
 			},
 			true,
 		},
 		{
-			domain.SignUpRequest{
+			protocol.SignUpRequest{
 				Username: "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttestt",
 				Password: "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
 			},
 			false,
 		},
 		{
-			domain.SignUpRequest{
+			protocol.SignUpRequest{
 				Username: "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
 				Password: "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttestt",
 			},

@@ -2,9 +2,10 @@ package jwt
 
 import (
 	"fmt"
+	"forest-run/common"
+	"forest-run/main-server/boot"
+	"forest-run/main-server/domain"
 	"github.com/stretchr/testify/assert"
-	"main-server/boot"
-	"main-server/domain"
 	"strings"
 	"testing"
 )
@@ -24,7 +25,7 @@ func TestJWTTokens(t *testing.T) {
 	body, err := provider.Parse(token.Token)
 	assert.Nil(t, err)
 
-	assert.Equal(t, domain.UserId(1), body.UserId)
+	assert.Equal(t, common.UserId(1), body.UserId)
 
 	splitted := strings.Split(string(token.Token), ".")
 	assert.Len(t, splitted, 3)
@@ -55,5 +56,5 @@ func TestExpiredJWTToken(t *testing.T) {
 
 	body, err := provider.ParseUnverified(token.Token)
 	assert.Nil(t, err)
-	assert.Equal(t, domain.UserId(1), body.UserId)
+	assert.Equal(t, common.UserId(1), body.UserId)
 }

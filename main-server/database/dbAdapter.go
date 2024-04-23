@@ -2,11 +2,11 @@ package database
 
 import (
 	"context"
+	"forest-run/main-server/boot"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/pashagolub/pgxmock/v3"
 	"go.uber.org/zap"
-	"main-server/boot"
 )
 
 type DbAdapter interface {

@@ -1,9 +1,9 @@
 package auth
 
 import (
+	"forest-run/main-server/api/controller/auth"
+	"forest-run/main-server/database"
 	"github.com/gofiber/fiber/v2"
-	"main-server/api/controller/auth"
-	"main-server/database"
 )
 
 // InitSignUp
@@ -12,10 +12,10 @@ import (
 // @Tags			auth
 // @Accepts		json
 // @Produce		json
-// @Param			input	body		domain.SignUpRequest	true	"SignUp data"
-// @Success		200		{object}	domain.SignUpResponse
-// @Failure		400,409	{object}	domain.ErrorResponse
-// @Failure		500		{object}	domain.ErrorResponse
+// @Param			input	body		protocol.SignUpRequest	true	"SignUp data"
+// @Success		200		{object}	protocol.SignUpResponse
+// @Failure		400,409	{object}	protocol.ErrorResponse
+// @Failure		500		{object}	protocol.ErrorResponse
 // @Router			/auth/sign-up [post]
 func InitSignUp(app fiber.Router, db database.DbAdapter) {
 	c := auth.NewSignUp(db)

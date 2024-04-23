@@ -1,10 +1,10 @@
 package runs
 
 import (
+	"forest-run/main-server/api/controller/runs"
+	"forest-run/main-server/database"
+	"forest-run/main-server/notifications"
 	"github.com/gofiber/fiber/v2"
-	"main-server/api/controller/runs"
-	"main-server/database"
-	"main-server/notifications"
 )
 
 // InitInvite
@@ -13,10 +13,10 @@ import (
 // @Tags			runs
 // @Produce		json
 // @Security		ApiKeyAuth
-// @Param			input	body		domain.InviteRunRequest	true "input"
-// @Success		200		{object}	domain.InviteRunResponse
-// @Failure		400,401,405	{object}	domain.ErrorResponse
-// @Failure		500		{object}	domain.ErrorResponse
+// @Param			input	body		protocol.InviteRunRequest	true "input"
+// @Success		200		{object}	protocol.InviteRunResponse
+// @Failure		400,401,405	{object}	protocol.ErrorResponse
+// @Failure		500		{object}	protocol.ErrorResponse
 // @Router			/api/runs/Invite [post]
 func InitInvite(group fiber.Router, db database.DbAdapter, notifs notifications.Manager) {
 	c := runs.NewInvite(db, notifs)

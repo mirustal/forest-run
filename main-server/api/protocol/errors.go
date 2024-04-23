@@ -1,4 +1,4 @@
-package domain
+package protocol
 
 type ErrorCode int
 
