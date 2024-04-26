@@ -1,7 +1,9 @@
 package controller
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/contrib/websocket"
+)
 
-type Controller interface {
-	Handle(ctx *fiber.Ctx) error
+type WsController interface {
+	Handle(ctx *websocket.Conn)
 }

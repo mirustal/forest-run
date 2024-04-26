@@ -1,9 +1,9 @@
 package middleware
 
 import (
+	"forest-run/common/jwt"
 	"forest-run/main-server/api/protocol"
-	"forest-run/main-server/domain"
-	"forest-run/main-server/jwt"
+	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 	"net/http"
 	"strings"
@@ -11,7 +11,7 @@ import (
 
 const authDataKey = "jwt.auth-data"
 
-func InitAuth(group fiber.Router, jwt jwt.Provider) {
+func InitJwtAuth(group fiber.Router, jwt jwt.Provider) {
 	group.Use(auth{
 		jwt: jwt,
 	}.authorize)
@@ -38,7 +38,7 @@ func (a auth) authorize(ctx *fiber.Ctx) error {
 		})
 	}
 
-	authData, err := a.jwt.Parse(domain.JWTToken(token))
+	authData, err := a.jwt.Parse(jwt.JWTToken(token))
 	if err != nil {
 		ctx.Context().Logger().Printf("error while parsing jwt token: %v", err.Error())
 		return ctx.Status(http.StatusUnauthorized).JSON(protocol.ErrorResponse{
@@ -50,6 +50,10 @@ func (a auth) authorize(ctx *fiber.Ctx) error {
 	return ctx.Next()
 }
 
-func GetAuthData(c *fiber.Ctx) domain.JWTBody {
-	return c.Locals(authDataKey).(domain.JWTBody)
+func GetAuthData(c *fiber.Ctx) jwt.JWTBody {
+	return c.Locals(authDataKey).(jwt.JWTBody)
+}
+
+func GetAuthDataWs(c *websocket.Conn) jwt.JWTBody {
+	return c.Locals(authDataKey).(jwt.JWTBody)
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	defs2 "forest-run/common/defs"
+	"forest-run/common/jwt"
 	logger2 "forest-run/common/logger"
 	"forest-run/realtime-runs-server/api/route"
 	"forest-run/realtime-runs-server/boot"
@@ -36,7 +37,7 @@ func main() {
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 	}))
 
-	route.Setup(app, env, defs)
+	route.Setup(app, defs, jwt.NewProvider(env.JWTConfig))
 
 	if err := app.Listen(env.ServerAddress); err != nil {
 		logger.Fatal("Oops... Server is not running! Reason: ", zap.Error(err))

@@ -1,6 +1,9 @@
 package protocol
 
-import "forest-run/main-server/domain"
+import (
+	"forest-run/common/jwt"
+	"forest-run/main-server/domain"
+)
 
 type (
 	SignUpRequest struct {
@@ -12,8 +15,8 @@ type (
 )
 
 type AuthDataResponse struct {
-	RefreshToken domain.RefreshToken `json:"refreshToken"`
-	AuthToken    domain.JWTTokenData `json:"authToken,omitempty"`
+	RefreshToken jwt.RefreshToken `json:"refreshToken"`
+	AuthToken    jwt.JWTTokenData `json:"authToken,omitempty"`
 }
 
 type (
@@ -27,8 +30,8 @@ type (
 
 type (
 	RefreshTokensRequest struct {
-		AuthToken    domain.JWTToken     `json:"authToken"`
-		RefreshToken domain.RefreshToken `json:"refreshToken"`
+		AuthToken    jwt.JWTToken     `json:"authToken"`
+		RefreshToken jwt.RefreshToken `json:"refreshToken"`
 	}
 	RefreshTokensResponse struct {
 		AuthDataResponse

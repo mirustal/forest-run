@@ -1,8 +1,8 @@
 package runs
 
 import (
+	"forest-run/common/middleware"
 	"forest-run/main-server/api/controller"
-	"forest-run/main-server/api/middleware"
 	"forest-run/main-server/api/protocol"
 	"forest-run/main-server/database"
 	"forest-run/main-server/notifications"

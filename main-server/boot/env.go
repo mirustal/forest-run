@@ -1,23 +1,21 @@
 package boot
 
 import (
-	"errors"
 	"forest-run/common/configs"
-	"log"
-	"time"
-
+	"forest-run/common/jwt"
 	"github.com/spf13/viper"
+	"log"
 )
 
 type Env struct {
 	configs.CommonConfig `yaml:"commonConfig"`
 	configs.LoggerConfig `yaml:"loggerConfig"`
-	JWTConfig            `yaml:"JWTConfig"`
+	jwt.JWTConfig        `yaml:"JWTConfig"`
 	DBConfig             `yaml:"DBConfig"`
 }
 
 func (e Env) validate() error {
-	if err := e.JWTConfig.validate(); err != nil {
+	if err := e.JWTConfig.Validate(); err != nil {
 		return err
 	}
 
@@ -30,28 +28,6 @@ func (e Env) validate() error {
 
 type DBConfig struct {
 	DBUrl string `yaml:"DBUrl"`
-}
-
-type JWTConfig struct {
-	SecureKey            string        `yaml:"secureKey"`
-	JWTTokenLifeTime     time.Duration `yaml:"JWTTokenLifeTime"`
-	RefreshTokenLifeTime time.Duration `yaml:"refreshTokenLifeTime"`
-}
-
-func (cfg JWTConfig) validate() error {
-	if cfg.JWTTokenLifeTime <= 0 {
-		return errors.New("JWTTokenLifeTime <= 0")
-	}
-
-	if len(cfg.SecureKey) == 0 {
-		return errors.New("length of secure key is 0")
-	}
-
-	if cfg.RefreshTokenLifeTime <= 0 {
-		return errors.New("RefreshTokenLifeTime <= 0")
-	}
-
-	return nil
 }
 
 func NewEnv() (env Env, err error) {

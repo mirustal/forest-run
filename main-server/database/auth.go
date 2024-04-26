@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"forest-run/common"
+	"forest-run/common/jwt"
 	"forest-run/main-server/domain"
 	"github.com/jackc/pgx/v5/pgconn"
 )
@@ -12,8 +13,8 @@ import (
 type AuthRepo interface {
 	StoreNewUser(username domain.Username, password domain.HashedPassword, ctx context.Context) error
 	GetUserByUsername(username domain.Username, ctx context.Context) (domain.User, error)
-	StoreUserRefreshToken(id common.UserId, data domain.RefreshTokenData, ctx context.Context) error
-	GetUserRefreshToken(id common.UserId, ctx context.Context) (data domain.RefreshTokenData, err error)
+	StoreUserRefreshToken(id common.UserId, data jwt.RefreshTokenData, ctx context.Context) error
+	GetUserRefreshToken(id common.UserId, ctx context.Context) (data jwt.RefreshTokenData, err error)
 }
 
 func (p PgDbAdapter) StoreNewUser(username domain.Username, password domain.HashedPassword, ctx context.Context) error {
@@ -69,7 +70,7 @@ func (p PgDbAdapter) GetUserById(id common.UserId, ctx context.Context) (user do
 	return user, nil
 }
 
-func (p PgDbAdapter) StoreUserRefreshToken(id common.UserId, data domain.RefreshTokenData, ctx context.Context) error {
+func (p PgDbAdapter) StoreUserRefreshToken(id common.UserId, data jwt.RefreshTokenData, ctx context.Context) error {
 	t, err := p.dbPool.Begin(ctx)
 	if err != nil {
 		defer t.Rollback(ctx)
@@ -90,7 +91,7 @@ func (p PgDbAdapter) StoreUserRefreshToken(id common.UserId, data domain.Refresh
 	return t.Commit(ctx)
 }
 
-func (p PgDbAdapter) GetUserRefreshToken(id common.UserId, ctx context.Context) (data domain.RefreshTokenData, err error) {
+func (p PgDbAdapter) GetUserRefreshToken(id common.UserId, ctx context.Context) (data jwt.RefreshTokenData, err error) {
 	t, err := p.dbPool.Begin(ctx)
 	defer t.Rollback(ctx)
 	if err != nil {

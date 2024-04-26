@@ -1,10 +1,10 @@
 package auth
 
 import (
+	"forest-run/common/jwt"
 	"forest-run/main-server/api/controller"
 	"forest-run/main-server/api/protocol"
 	"forest-run/main-server/database"
-	"forest-run/main-server/jwt"
 	"github.com/gofiber/fiber/v2"
 	"net/http"
 	"time"

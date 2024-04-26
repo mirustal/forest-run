@@ -7,3 +7,7 @@ loggerConfig:
   maxLogFileSize: 5
   maxLogFileBackups: 1
   maxLogFileAge: 30
+JWTConfig: # same as on main-server
+  secureKey: qwerty123
+  JWTTokenLifeTime: 1800000000000 #30 mins
+  refreshTokenLifeTime: 2592000000000000 #30 days
