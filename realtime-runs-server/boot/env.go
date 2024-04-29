@@ -11,6 +11,13 @@ type Env struct {
 	configs.CommonConfig `yaml:"commonConfig"`
 	configs.LoggerConfig `yaml:"loggerConfig"`
 	jwt.JWTConfig        `yaml:"JWTConfig"`
+	RedisConfig          `yaml:"RedisConfig"`
+}
+
+type RedisConfig struct {
+	Address  string `yaml:"Address"`
+	Password string `yaml:"Password"`
+	DB       int    `yaml:"DB"`
 }
 
 func (e Env) validate() error {

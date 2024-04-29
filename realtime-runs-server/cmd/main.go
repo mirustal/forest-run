@@ -6,6 +6,7 @@ import (
 	logger2 "forest-run/common/logger"
 	"forest-run/realtime-runs-server/api/route"
 	"forest-run/realtime-runs-server/boot"
+	"forest-run/realtime-runs-server/database"
 	"github.com/gofiber/contrib/fiberzap/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -37,7 +38,8 @@ func main() {
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 	}))
 
-	route.Setup(app, defs, jwt.NewProvider(env.JWTConfig))
+	db := database.NewRedisAdapter(env.RedisConfig)
+	route.Setup(app, defs, jwt.NewProvider(env.JWTConfig), db)
 
 	if err := app.Listen(env.ServerAddress); err != nil {
 		logger.Fatal("Oops... Server is not running! Reason: ", zap.Error(err))
