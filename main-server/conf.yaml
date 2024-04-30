@@ -13,3 +13,14 @@ JWTConfig:
   secureKey: qwerty123
   JWTTokenLifeTime: 1800000000000 #30 mins
   refreshTokenLifeTime: 2592000000000000 #30 days
+RealTimeServers:
+  ruMSK:
+    Address: localhost:8081
+    ApproximatePosition:
+      Latitude: 55.75222
+      Longitude: 37.61556
+  ruSPB:
+    Address: localhost:8082
+    ApproximatePosition:
+      Latitude: 59.93863
+      Longitude: 30.31413

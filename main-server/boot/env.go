@@ -3,15 +3,18 @@ package boot
 import (
 	"forest-run/common/configs"
 	"forest-run/common/jwt"
+	"forest-run/common/runs"
+	"forest-run/main-server/domain"
 	"github.com/spf13/viper"
 	"log"
 )
 
 type Env struct {
-	configs.CommonConfig `yaml:"commonConfig"`
-	configs.LoggerConfig `yaml:"loggerConfig"`
-	jwt.JWTConfig        `yaml:"JWTConfig"`
-	DBConfig             `yaml:"DBConfig"`
+	configs.CommonConfig  `yaml:"commonConfig"`
+	configs.LoggerConfig  `yaml:"loggerConfig"`
+	jwt.JWTConfig         `yaml:"JWTConfig"`
+	DBConfig              `yaml:"DBConfig"`
+	RealTimeServersConfig `yaml:"RealTimeServers" mapstructure:"RealTimeServers"`
 }
 
 func (e Env) validate() error {
@@ -24,6 +27,12 @@ func (e Env) validate() error {
 	}
 
 	return nil
+}
+
+type RealTimeServersConfig map[domain.RegionId]RealTimeServerConfig
+type RealTimeServerConfig struct {
+	Address             string     `yaml:"Address"`
+	ApproximatePosition runs.Point `yaml:"ApproximatePosition"`
 }
 
 type DBConfig struct {

@@ -29,7 +29,7 @@ type (
 		Points []Point `json:"points,omitempty"`
 	}
 	Point struct {
-		Latitude  float64 `json:"latitude"`
-		Longitude float64 `json:"longitude"`
+		Latitude  float64 `json:"latitude" yaml:"latitude"`
+		Longitude float64 `json:"longitude" yaml:"longitude"`
 	}
 )
