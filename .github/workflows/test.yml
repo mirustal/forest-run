@@ -1,0 +1,9 @@
+name: forest-run
+on: workflow_dispatch
+jobs:
+  print_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print to console
+        run: echo Hello GH Actions!
+        
