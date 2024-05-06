@@ -27,6 +27,6 @@ jobs:
           go build -v ./main-server
 
 
-      # - name: Build project
-      #   run: go build -v ./realtime-runs-server
+      - name: Build project
+        run: go build -v ./realtime-runs-server
 
