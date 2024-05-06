@@ -1,7 +1,12 @@
 name: forest-run
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - devops/workflow  
+  pull_request:
+    branches:
+      - devops/workflow
 
 jobs:
   build_and_push:
@@ -15,8 +20,11 @@ jobs:
           go-version: '1.21' 
 
 
-      - name: Build project
-        run: go build -v ./...
+      - name: Build main project
+        run: go build -v ./main-server
+
+      # - name: Build project
+      #   run: go build -v ./realtime-runs-server
 
 
       - name: Commit and push if success
