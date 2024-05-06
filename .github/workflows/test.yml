@@ -1,9 +1,30 @@
 name: forest-run
-on: workflow_dispatch
+
+on:
+  workflow_dispatch:
+
 jobs:
-  print_test:
+  build_and_push:
     runs-on: ubuntu-latest
     steps:
-      - name: Print to console
-        run: echo Hello GH Actions!
-        
+
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.21' 
+
+
+      - name: Build project
+        run: go build -v ./...
+
+
+      - name: Commit and push if success
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Compiled Go project"
+          git push origin HEAD:devops/workflow
+        if: success() 
+
