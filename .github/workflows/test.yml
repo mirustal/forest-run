@@ -2,11 +2,9 @@ name: forest-run
 
 on:
   push:
-    branches:
-      - devops/workflow  
+    branches: [ "devops/workflow" ]
   pull_request:
-    branches:
-      - devops/workflow
+    branches: [ "devops/workflow" ]
 
 jobs:
   build_and_push:
