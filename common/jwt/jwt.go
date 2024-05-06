@@ -3,36 +3,34 @@ package jwt
 import (
 	"errors"
 	"fmt"
-	"forest-run/main-server/boot"
-	"forest-run/main-server/domain"
 	"github.com/golang-jwt/jwt/v5"
 	"math/rand"
 	"time"
 )
 
 type Provider interface {
-	CreateToken(body domain.JWTBody) (domain.JWTTokenData, error)
-	CreateRefreshToken() (domain.RefreshTokenData, error)
-	Parse(token domain.JWTToken) (domain.JWTBody, error)
-	ParseUnverified(token domain.JWTToken) (body domain.JWTBody, err error)
+	CreateToken(body JWTBody) (JWTTokenData, error)
+	CreateRefreshToken() (RefreshTokenData, error)
+	Parse(token JWTToken) (JWTBody, error)
+	ParseUnverified(token JWTToken) (body JWTBody, err error)
 }
 
-func NewProvider(cfg boot.JWTConfig) Provider {
+func NewProvider(cfg JWTConfig) Provider {
 	return jwtProvider{
 		JWTConfig: cfg,
 	}
 }
 
 type jwtProvider struct {
-	boot.JWTConfig
+	JWTConfig
 }
 
 type jwtClaims struct {
-	domain.JWTBody
+	JWTBody
 	jwt.RegisteredClaims
 }
 
-func (j jwtProvider) CreateToken(body domain.JWTBody) (token domain.JWTTokenData, err error) {
+func (j jwtProvider) CreateToken(body JWTBody) (token JWTTokenData, err error) {
 	expTime := time.Now().Add(j.JWTTokenLifeTime)
 
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, jwtClaims{
@@ -47,13 +45,13 @@ func (j jwtProvider) CreateToken(body domain.JWTBody) (token domain.JWTTokenData
 		return token, err
 	}
 
-	return domain.JWTTokenData{
-		Token:     domain.JWTToken(s),
+	return JWTTokenData{
+		Token:     JWTToken(s),
 		ExpiresAt: expTime,
 	}, err
 }
 
-func (j jwtProvider) Parse(token domain.JWTToken) (body domain.JWTBody, err error) {
+func (j jwtProvider) Parse(token JWTToken) (body JWTBody, err error) {
 	t, err := jwt.ParseWithClaims(string(token), &jwtClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(j.SecureKey), nil
 	})
@@ -73,7 +71,7 @@ func (j jwtProvider) Parse(token domain.JWTToken) (body domain.JWTBody, err erro
 	return body, errors.New("unable to parse jwt claims")
 }
 
-func (j jwtProvider) ParseUnverified(token domain.JWTToken) (body domain.JWTBody, err error) {
+func (j jwtProvider) ParseUnverified(token JWTToken) (body JWTBody, err error) {
 	t, _ := jwt.ParseWithClaims(string(token), &jwtClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(j.SecureKey), nil
 	}, jwt.WithoutClaimsValidation())
@@ -89,7 +87,7 @@ func (j jwtProvider) ParseUnverified(token domain.JWTToken) (body domain.JWTBody
 	return body, errors.New("unable to parse jwt claims")
 }
 
-func (j jwtProvider) CreateRefreshToken() (data domain.RefreshTokenData, err error) {
+func (j jwtProvider) CreateRefreshToken() (data RefreshTokenData, err error) {
 	b := make([]byte, 32)
 
 	s := rand.NewSource(time.Now().UnixNano())
@@ -99,10 +97,10 @@ func (j jwtProvider) CreateRefreshToken() (data domain.RefreshTokenData, err err
 		return data, err
 	}
 
-	t := domain.RefreshToken(fmt.Sprintf("%x", b))
+	t := RefreshToken(fmt.Sprintf("%x", b))
 	exp := time.Now().Add(j.RefreshTokenLifeTime)
 
-	data = domain.RefreshTokenData{
+	data = RefreshTokenData{
 		Token:     &t,
 		ExpiresAt: &exp,
 	}

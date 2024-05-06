@@ -1,15 +1,33 @@
 package controller
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"forest-run/common/defs"
+	"forest-run/common/middleware"
+	"github.com/gofiber/contrib/websocket"
+	"time"
+)
 
 type connect struct {
+	defs defs.Defs
 }
 
-func NewConnect() Controller {
-	return &connect{}
+func NewConnect(defs defs.Defs) WsController {
+	return &connect{defs: defs}
 }
 
-func (c connect) Handle(ctx *fiber.Ctx) error {
-	// todo
-	return nil
+func (c connect) Handle(conn *websocket.Conn) {
+	authData := middleware.GetAuthDataWs(conn)
+
+	conn.WriteJSON(authData)
+	go TDelayed(conn)
+}
+
+func TDelayed(conn *websocket.Conn) {
+	time.Sleep(time.Second * 10)
+	conn.WriteJSON(struct {
+		Message string
+	}{
+		Message: "delayed message",
+	})
+	conn.Close()
 }

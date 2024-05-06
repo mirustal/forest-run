@@ -2,6 +2,7 @@ package boot
 
 import (
 	"forest-run/common/configs"
+	"forest-run/common/jwt"
 	"github.com/spf13/viper"
 	"log"
 )
@@ -9,10 +10,21 @@ import (
 type Env struct {
 	configs.CommonConfig `yaml:"commonConfig"`
 	configs.LoggerConfig `yaml:"loggerConfig"`
+	jwt.JWTConfig        `yaml:"JWTConfig"`
+	RedisConfig          `yaml:"RedisConfig"`
+}
+
+type RedisConfig struct {
+	Address  string `yaml:"Address"`
+	Password string `yaml:"Password"`
+	DB       int    `yaml:"DB"`
 }
 
 func (e Env) validate() error {
 	if err := e.LoggerConfig.Validate(); err != nil {
+		return err
+	}
+	if err := e.JWTConfig.Validate(); err != nil {
 		return err
 	}
 

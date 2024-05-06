@@ -1,11 +1,10 @@
 package auth
 
 import (
+	"forest-run/common/jwt"
 	"forest-run/main-server/api/controller"
 	"forest-run/main-server/api/protocol"
 	"forest-run/main-server/database"
-	"forest-run/main-server/domain"
-	"forest-run/main-server/jwt"
 	"github.com/gofiber/fiber/v2"
 	"net/http"
 )
@@ -43,7 +42,7 @@ func (s signIn) Handle(ctx *fiber.Ctx) error {
 		return ctx.Status(http.StatusInternalServerError).JSON(protocol.ErrorResponse{Message: "error on creating refresh token"})
 	}
 
-	t, err := s.jwt.CreateToken(domain.JWTBody{UserId: user.Id})
+	t, err := s.jwt.CreateToken(jwt.JWTBody{UserId: user.Id})
 	if err != nil {
 		return ctx.Status(http.StatusInternalServerError).JSON(protocol.ErrorResponse{Message: "error on creating jwt token"})
 	}

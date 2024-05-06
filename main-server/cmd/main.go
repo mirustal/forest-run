@@ -3,12 +3,12 @@ package main
 import (
 	"forest-run/common/configs"
 	defs2 "forest-run/common/defs"
+	"forest-run/common/jwt"
 	logger2 "forest-run/common/logger"
 	"forest-run/main-server/api/route"
 	"forest-run/main-server/boot"
 	"forest-run/main-server/database"
 	_ "forest-run/main-server/docs"
-	"forest-run/main-server/jwt"
 	"forest-run/main-server/notifications"
 	"forest-run/main-server/purchasing"
 	"github.com/gofiber/contrib/fiberzap/v2"
@@ -45,8 +45,6 @@ func main() {
 		logger.Fatal("Error on loading defs2: ", zap.Error(err))
 	}
 
-	jwtProvider := jwt.NewProvider(env.JWTConfig)
-
 	app := fiber.New()
 	app.Use(recover.New())
 	app.Use(fiberzap.New(fiberzap.Config{Logger: logger}))
@@ -56,15 +54,12 @@ func main() {
 		logger.Fatal("Error on initializing DB: ", zap.Error(err))
 	}
 
-	notifs := notifications.NewManager(db)
-	purchasingManager := purchasing.NewManager()
-
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 	}))
 
-	route.Setup(app, db, jwtProvider, notifs, defs, purchasingManager)
+	route.Setup(app, db, jwt.NewProvider(env.JWTConfig), notifications.NewManager(db), defs, purchasing.NewManager())
 
 	if env.AppEnv == configs.DevEnv {
 		app.Get("/swagger/*", swagger.HandlerDefault)
