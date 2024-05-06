@@ -19,7 +19,10 @@ jobs:
 
 
       - name: Build main project
-        run: go build -v ./main-server
+        run: |
+          pwd
+          ls
+          go build -v ./main-server
 
       # - name: Build project
       #   run: go build -v ./realtime-runs-server
