@@ -35,5 +35,3 @@ test:
 
 shell:
 	docker exec -it $(APP_NAME) /bin/sh
-
-п
