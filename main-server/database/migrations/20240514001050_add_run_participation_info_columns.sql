@@ -1,9 +1,9 @@
 -- +goose Up
 -- +goose StatementBegin
 ALTER TABLE runs_participations
-    ADD avg_tempo INTEGER DEFAULT 0,
+    ADD avg_tempo INTEGER DEFAULT NULL,
     ADD created_at TIMESTAMP DEFAULT NOW(),
-    ADD finish_time INTERVAL DEFAULT '00:00:00';
+    ADD finish_time INTERVAL DEFAULT NULL;
 -- +goose StatementEnd
 
 -- +goose Down
