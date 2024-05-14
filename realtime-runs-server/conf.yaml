@@ -1,7 +1,6 @@
 commonConfig:
   appEnv: dev
   serverAddress: localhost:8081
-  defsPath: ../data/defs.json
 loggerConfig:
   logSaveFile: logs/log.log
   maxLogFileSize: 5
@@ -15,4 +14,4 @@ RedisConfig:
   Address: localhost:6379
   Password: qwerty123
   DB: 0
- MainServerAddress: localhost:8080
+MainServerAddress: localhost:8080

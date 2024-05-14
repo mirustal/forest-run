@@ -12,7 +12,6 @@ const (
 type CommonConfig struct {
 	AppEnv        EnvType `yaml:"appEnv"`
 	ServerAddress string  `yaml:"serverAddress"`
-	DefsPath      string  `yaml:"defsPath"` // replace with url to cdn
 }
 
 type LoggerConfig struct {
